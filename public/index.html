@@ -5,40 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>VibeDev — Fix & Ship</title>
 <style>
-:root{--bg:#0b0e14;--card:#11151f;--border:#232a3a;--text:#e6e9f0;--muted:#8b93a7;--ok:#34d399}
+:root{--bg:#0b0e14;--card:#11151f;--border:#232a3a;--text:#e6e9f0;--muted:#8b93a7}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:radial-gradient(900px 400px at 15% -10%,#2a1a4a,transparent 50%),var(--bg);color:var(--text);line-height:1.55}
 .wrap{width:min(720px,92vw);margin:0 auto;padding:48px 0}
-h1{margin:0 0 8px;font-size:clamp(1.6rem,3vw,2.2rem)}
-.lead{color:var(--muted);font-size:1.05rem}
-.flow{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0;align-items:center}
-.pill{padding:8px 14px;border-radius:999px;border:1px solid var(--border);background:var(--card);font-size:.9rem}
-.arrow{color:var(--muted)}
+h1{margin:0 0 8px} .lead{color:var(--muted)}
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin:16px 0}
-a.btn{display:inline-block;margin-top:8px;padding:12px 20px;border-radius:12px;background:linear-gradient(135deg,#7c5cff,#5b9dff);color:#061018;font-weight:700;text-decoration:none}
+a.btn{display:inline-block;padding:12px 20px;border-radius:12px;background:linear-gradient(135deg,#7c5cff,#5b9dff);color:#061018;font-weight:700;text-decoration:none}
 .muted{color:var(--muted);font-size:.9rem}
+ul{color:var(--muted)}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>VibeDev — Fix & Ship</h1>
-  <p class="lead">Software that takes an <b>existing project</b>, repairs it, and prepares free deploy — without the headache. It does not build apps from ideas.</p>
-
-  <div class="flow">
-    <span class="pill">Import</span><span class="arrow">→</span>
-    <span class="pill">Fix</span><span class="arrow">→</span>
-    <span class="pill">Ship</span>
-  </div>
-
+  <p class="lead">Import an existing project → repair it → deploy with GitHub Pages or Render after a one-time sign-in.</p>
   <div class="card">
-    <p style="margin:0 0 12px">Open the professional Fix & Ship pipeline:</p>
     <a class="btn" href="app.html">Open Fix & Ship</a>
   </div>
-
   <div class="card">
-    <p class="muted" style="margin:0">Optional: <a href="create-api.html" style="color:#9dbbff">Create API</a> only if a project needs a simple API layer. Core product remains fix + deploy.</p>
+    <p style="margin-top:0"><b>Auto-deploy</b></p>
+    <ul>
+      <li><b>GitHub Pages</b> — connect with a GitHub token; VibeDev pushes and enables Pages</li>
+      <li><b>Render</b> — link GitHub in Render once, paste Render API key; VibeDev creates the service</li>
+    </ul>
+    <p class="muted">No app can deploy to your accounts without that link — by design.</p>
   </div>
-
-  <p class="muted">Tools only. You are responsible for what you ship.</p>
 </div>
 </body>
 </html>

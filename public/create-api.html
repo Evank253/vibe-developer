@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Create API — VibeDev</title>
+<style>
+:root{--bg:#0a0e14;--card:#121a24;--border:#2a3648;--text:#eef3fa;--muted:#93a0b4;--accent:#7c5cff;--ok:#3dd68c}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:radial-gradient(800px 400px at 10% -10%,#2a1a4a,transparent 55%),var(--bg);color:var(--text);line-height:1.5}
+.wrap{width:min(900px,94vw);margin:0 auto;padding:24px 0 48px}
+h1{margin:0 0 6px;font-size:1.6rem}.lead{color:var(--muted);margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px}
+label{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 4px}
+input,select,textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:#0b1119;color:var(--text);font:inherit}
+.row{display:flex;gap:12px;flex-wrap:wrap}.row>*{flex:1;min-width:140px}
+.btn{display:inline-block;padding:11px 18px;border-radius:12px;border:0;background:linear-gradient(135deg,#7c5cff,#5b9dff);color:#061018;font-weight:700;cursor:pointer;font:inherit;margin-top:12px}
+.btn:hover{filter:brightness(1.08)}
+pre{background:#0b1119;border:1px solid var(--border);border-radius:10px;padding:12px;overflow:auto;font-size:.8rem;max-height:280px}
+.file-list{font-size:.85rem;color:var(--muted)}.file-list b{color:var(--ok)}
+a{color:#9dbbff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p style="margin:0 0 8px"><a href="index.html">← Fleet Hub</a></p>
+  <h1>Create API</h1>
+  <p class="lead">Pick FastAPI or Express → generate routes + health + free deploy configs. Runs in the browser (no AI key).</p>
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <label>Framework</label>
+        <select id="framework">
+          <option value="fastapi">FastAPI (Python)</option>
+          <option value="express">Express (Node)</option>
+        </select>
+      </div>
+      <div>
+        <label>Project name</label>
+        <input id="name" value="my-api"/>
+      </div>
+    </div>
+    <label>Main resource (route name)</label>
+    <input id="resource" value="items" placeholder="items, users, products…"/>
+    <label style="display:flex;align-items:center;gap:8px;margin-top:12px">
+      <input type="checkbox" id="auth" style="width:auto"/> Include demo /auth login
+    </label>
+    <button class="btn" type="button" id="gen">Generate API project</button>
+  </div>
+
+  <div class="card" id="out" style="display:none">
+    <h3 style="margin:0 0 8px">Generated files</h3>
+    <p class="file-list" id="fileList"></p>
+    <p id="runHint" style="color:var(--ok);font-size:.9rem"></p>
+    <label>Preview file</label>
+    <select id="filePick"></select>
+    <pre id="preview"></pre>
+    <button class="btn" type="button" id="download">Download as .json pack</button>
+    <p style="font-size:.85rem;color:var(--muted);margin-top:12px">Copy files into a folder, then run the command above. Or push to GitHub and use Render free with the included <code>render.yaml</code>.</p>
+  </div>
+</div>
+<script type="module">
+// Inline minimal generator (mirrors apiCreatorService.js)
+function capitalize(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+function createApiProject({framework,name,routes,withAuth}){
+  const safe=(name||'my-api').toLowerCase().replace(/[^a-z0-9-_]/g,'-')||'my-api';
+  const resource=(routes[0]||'items').toLowerCase().replace(/[^a-z0-9_]/g,'_')||'items';
+  if(framework==='express') return buildExpress(safe,resource,withAuth);
+  return buildFastApi(safe,resource,withAuth);
+}
+function buildFastApi(name,resource,withAuth){
+  const files=[
+    {path:'requirements.txt',content:'fastapi==0.115.0\nuvicorn[standard]==0.30.6\npydantic==2.8.2\n'},
+    {path:'README.md',content:'# '+name+'\n\n```bash\npip install -r requirements.txt\nuvicorn app.main:app --reload --port 8000\n```\n\nDocs: http://127.0.0.1:8000/docs\n'},
+    {path:'app/__init__.py',content:''},
+    {path:'app/routes/__init__.py',content:''},
+    {path:'app/main.py',content:`from fastapi import FastAPI\nfrom fastapi.middleware.cors import CORSMiddleware\nfrom app.routes import ${resource}${withAuth?', auth':''}\n\napp = FastAPI(title="${name}")\napp.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])\napp.include_router(${resource}.router, prefix="/api/${resource}", tags=["${resource}"])\n${withAuth?'app.include_router(auth.router, prefix="/api/auth", tags=["auth"])':''}\n\n@app.get("/health")\ndef health():\n    return {"status": "ok"}\n`},
+    {path:`app/routes/${resource}.py`,content:`from fastapi import APIRouter, HTTPException\nfrom pydantic import BaseModel\nfrom typing import Dict, List\n\nrouter = APIRouter()\nclass ${capitalize(resource)}In(BaseModel):\n    name: str\n    description: str = ""\nclass ${capitalize(resource)}Out(${capitalize(resource)}In):\n    id: int\n_db: Dict[int, ${capitalize(resource)}Out] = {}\n_next = 1\n\n@router.get("/", response_model=List[${capitalize(resource)}Out])\ndef list_all():\n    return list(_db.values())\n\n@router.post("/", response_model=${capitalize(resource)}Out, status_code=201)\ndef create(body: ${capitalize(resource)}In):\n    global _next\n    item = ${capitalize(resource)}Out(id=_next, **body.model_dump())\n    _db[_next] = item\n    _next += 1\n    return item\n\n@router.get("/{item_id}", response_model=${capitalize(resource)}Out)\ndef get_one(item_id: int):\n    if item_id not in _db: raise HTTPException(404, "Not found")\n    return _db[item_id]\n\n@router.delete("/{item_id}", status_code=204)\ndef delete_one(item_id: int):\n    if item_id not in _db: raise HTTPException(404, "Not found")\n    del _db[item_id]\n`},
+    {path:'render.yaml',content:`services:\n  - type: web\n    name: ${name}\n    runtime: python\n    buildCommand: pip install -r requirements.txt\n    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT\n    plan: free\n`},
+    {path:'Dockerfile',content:'FROM python:3.12-slim\nWORKDIR /app\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\nCOPY . .\nCMD ["uvicorn","app.main:app","--host","0.0.0.0","--port","8000"]\n'}
+  ];
+  if(withAuth) files.push({path:'app/routes/auth.py',content:`from fastapi import APIRouter, HTTPException\nfrom pydantic import BaseModel\nrouter = APIRouter()\nclass LoginIn(BaseModel):\n    email: str\n    password: str\n@router.post("/login")\ndef login(body: LoginIn):\n    if not body.email or not body.password: raise HTTPException(400, "required")\n    return {"token": "demo-token", "email": body.email}\n`});
+  return {framework:'fastapi',name,files,runHint:'uvicorn app.main:app --reload --port 8000',docsUrl:'http://127.0.0.1:8000/docs'};
+}
+function buildExpress(name,resource,withAuth){
+  const files=[
+    {path:'package.json',content:JSON.stringify({name,version:'1.0.0',type:'module',scripts:{start:'node src/index.js',dev:'node --watch src/index.js'},dependencies:{express:'^4.19.2',cors:'^2.8.5'}},null,2)},
+    {path:'README.md',content:'# '+name+'\n\n```bash\nnpm install && npm run dev\n```\n'},
+    {path:'src/index.js',content:`import express from 'express';\nimport cors from 'cors';\nimport { ${resource}Router } from './routes/${resource}.js';\n${withAuth?"import { authRouter } from './routes/auth.js';":""}\nconst app = express();\napp.use(cors());\napp.use(express.json());\napp.get('/health', (_req,res)=>res.json({status:'ok'}));\napp.use('/api/${resource}', ${resource}Router);\n${withAuth?"app.use('/api/auth', authRouter);":""}\napp.listen(process.env.PORT||3000, ()=>console.log('up'));\n`},
+    {path:`src/routes/${resource}.js`,content:`import { Router } from 'express';\nexport const ${resource}Router = Router();\nconst db = new Map(); let nextId = 1;\n${resource}Router.get('/', (_req,res)=>res.json([...db.values()]));\n${resource}Router.post('/', (req,res)=>{ const item={id:nextId++,name:req.body?.name||'',description:req.body?.description||''}; db.set(item.id,item); res.status(201).json(item); });\n${resource}Router.get('/:id', (req,res)=>{ const i=db.get(Number(req.params.id)); if(!i) return res.status(404).json({error:'Not found'}); res.json(i); });\n${resource}Router.delete('/:id', (req,res)=>{ if(!db.has(Number(req.params.id))) return res.status(404).json({error:'Not found'}); db.delete(Number(req.params.id)); res.status(204).end(); });\n`},
+    {path:'render.yaml',content:`services:\n  - type: web\n    name: ${name}\n    runtime: node\n    buildCommand: npm install\n    startCommand: npm start\n    plan: free\n`},
+    {path:'Dockerfile',content:'FROM node:22-alpine\nWORKDIR /app\nCOPY package.json .\nRUN npm install --omit=dev\nCOPY . .\nCMD ["npm","start"]\n'}
+  ];
+  if(withAuth) files.push({path:'src/routes/auth.js',content:`import { Router } from 'express';\nexport const authRouter = Router();\nauthRouter.post('/login', (req,res)=>{ const {email,password}=req.body||{}; if(!email||!password) return res.status(400).json({error:'required'}); res.json({token:'demo-token',email}); });\n`});
+  return {framework:'express',name,files,runHint:'npm install && npm run dev',docsUrl:'http://127.0.0.1:3000/health'};
+}
+
+let last=null;
+document.getElementById('gen').onclick=()=>{
+  last=createApiProject({
+    framework:document.getElementById('framework').value,
+    name:document.getElementById('name').value,
+    routes:[document.getElementById('resource').value],
+    withAuth:document.getElementById('auth').checked
+  });
+  document.getElementById('out').style.display='block';
+  document.getElementById('fileList').innerHTML=last.files.map(f=>'<b>'+f.path+'</b>').join(' · ');
+  document.getElementById('runHint').textContent='Run: '+last.runHint+' → '+last.docsUrl;
+  const pick=document.getElementById('filePick');
+  pick.innerHTML=last.files.map((f,i)=>'<option value="'+i+'">'+f.path+'</option>').join('');
+  document.getElementById('preview').textContent=last.files[0].content;
+};
+document.getElementById('filePick').onchange=(e)=>{
+  if(!last) return;
+  document.getElementById('preview').textContent=last.files[Number(e.target.value)].content;
+};
+document.getElementById('download').onclick=()=>{
+  if(!last) return;
+  const blob=new Blob([JSON.stringify(last,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=last.name+'-api-pack.json';
+  a.click();
+};
+</script>
+</body>
+</html>

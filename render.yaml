@@ -1,0 +1,19 @@
+# Render "Blueprints" — deploy VibeDev itself to a free web service.
+# Usage: push this repo to GitHub, then in Render choose "New > Blueprint"
+# and select this repo. Render will create a free web service automatically.
+
+services:
+  - type: web
+    name: vibedev
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    healthCheckPath: /api/health
+    envVars:
+      - key: AI_PROVIDER
+        value: mock
+      - key: NODE_ENV
+        value: production
+      - key: MAX_FILE_SIZE_MB
+        value: "2000"

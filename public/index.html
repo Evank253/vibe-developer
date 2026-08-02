@@ -14,7 +14,7 @@ h1{margin:0 0 8px;font-size:clamp(1.5rem,3vw,2.2rem)}.lead{color:var(--muted);ma
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px}
 .card h3{margin:0 0 6px;font-size:1rem}.card p{margin:0;color:var(--muted);font-size:.88rem}
 .tag{display:inline-block;font-size:.7rem;padding:3px 8px;border-radius:999px;border:1px solid var(--border);color:var(--muted);margin:8px 4px 0 0}
-.tag.live{color:var(--ok);border-color:#2a5a40}.tag.scaffold{color:var(--warn)}
+.tag.live{color:var(--ok);border-color:#2a5a40}
 a.btn{display:inline-block;margin-top:10px;padding:8px 14px;border-radius:10px;background:linear-gradient(135deg,#7c5cff,#5b9dff);color:#061018;font-weight:700;text-decoration:none;font-size:.9rem}
 footer{margin-top:32px;color:var(--muted);font-size:.85rem}
 </style>
@@ -22,11 +22,15 @@ footer{margin-top:32px;color:var(--muted);font-size:.85rem}
 <body>
 <div class="wrap">
 <h1>VibeDev Fleet Hub</h1>
-<p class="lead">Catalog of Evank253 repositories. Only complete, static-ready apps can go live on free hosts. Most repos are scaffolds and need code before deploy.</p>
-<div class="warn"><strong>Reality check:</strong> ~80 repos cannot all be “fully deployed” automatically. Free hosts (GitHub Pages / jsDelivr / Render free) need a working frontend or API. Priority live targets are listed first.</div>
+<p class="lead">Tools and live demos for Evank253 projects.</p>
 
-<h2 style="margin-top:28px;font-size:1.2rem">Live / public demos</h2>
 <div class="grid">
+  <div class="card">
+    <h3>Create API</h3>
+    <p>FastAPI or Express — routes, health, Render deploy configs</p>
+    <span class="tag live">NEW</span>
+    <div><a class="btn" href="create-api.html">Open Create API</a></div>
+  </div>
   <div class="card">
     <h3>KCN Singularity Studio</h3>
     <p>Domain studios + Jarvis workspace</p>
@@ -34,50 +38,14 @@ footer{margin-top:32px;color:var(--muted);font-size:.85rem}
     <div><a class="btn" href="https://cdn.jsdelivr.net/gh/Evank253/KCN_SINGULARITY_MASTER@main/docs/index.html" target="_blank" rel="noopener">Open</a></div>
   </div>
   <div class="card">
-    <h3>KCN Super Cognitive (demo)</h3>
+    <h3>Super Cognitive demo</h3>
     <p>Human-governed intelligence landing</p>
     <span class="tag live">LIVE</span>
     <div><a class="btn" href="https://cdn.jsdelivr.net/gh/Evank253/KCN-SUPER-COGNITIVE-HUMAN-GOVERNED-INTELLIGENCE-ECOSYSTEM-@copilot/kcn-super-cognitive-ecosystem/public-demo/index.html" target="_blank" rel="noopener">Open</a></div>
   </div>
-  <div class="card">
-    <h3>Vibe Developer</h3>
-    <p>This hub — run locally for full AI tools</p>
-    <span class="tag live">HUB</span>
-    <div><a class="btn" href="https://github.com/Evank253/vibe-developer" target="_blank" rel="noopener">Repo</a></div>
-  </div>
 </div>
 
-<h2 style="margin-top:28px;font-size:1.2rem">Priority next (need local build or Vercel)</h2>
-<div class="grid" id="priority"></div>
-
-<h2 style="margin-top:28px;font-size:1.2rem">Full catalog (sample)</h2>
-<div class="grid" id="all"></div>
-
-<footer>Tools only · Free hosts: GitHub Pages, jsDelivr CDN, Render free tier · Custom domains require DNS you control</footer>
+<footer>Tools only · Free hosts: GitHub Pages, jsDelivr, Render free</footer>
 </div>
-<script>
-const priority = [
-  {n:'vibe-developer',d:'AI super-developer — run: bash start.sh',s:'hub'},
-  {n:'KCN_SINGULARITY_MASTER',d:'Studios + Jarvis — already on CDN',s:'live'},
-  {n:'KCN-SUPER-COGNITIVE-HUMAN-GOVERNED-INTELLIGENCE-ECOSYSTEM-',d:'React frontend — npm run dev locally / Vercel',s:'partial'},
-  {n:'Kronos-Vibe-Coder',d:'HTML vibe coder',s:'static?'},
-  {n:'worldviewcommandcenteroftechnologies',d:'TypeScript SaaS scaffold',s:'scaffold'},
-  {n:'Global-Intelligence',d:'Python — needs API host',s:'api'}
-];
-const sample = [
-  'Kronos-super-intelligence-','KCN-SUPER-INTELLIGENT-CYBER-DEFENSE-SYSTEM-','KCN-ASGAII',
-  'KCS-command-center','kcs-core','x402-kronos-intelligence-api','Quantara-Core',
-  'Ketchums-Super-Intelligence-KSI-','CSC102-UAT-beginner-coding-summer-2026',
-  'HTML-school-assignment-','world-view','kcis-super-intelligence'
-];
-document.getElementById('priority').innerHTML = priority.map(p=>`
-  <div class="card"><h3>${p.n}</h3><p>${p.d}</p>
-  <span class="tag ${p.s==='live'?'live':'scaffold'}">${p.s}</span>
-  <div><a class="btn" href="https://github.com/Evank253/${p.n}" target="_blank" rel="noopener">GitHub</a></div></div>`).join('');
-document.getElementById('all').innerHTML = sample.map(n=>`
-  <div class="card"><h3>${n}</h3><p>Catalog entry — review in VibeDev before deploy</p>
-  <span class="tag scaffold">scaffold / review</span>
-  <div><a class="btn" href="https://github.com/Evank253/${n}" target="_blank" rel="noopener">GitHub</a></div></div>`).join('');
-</script>
 </body>
 </html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>VibeDev — Fix & Ship</title>
+<style>
+:root{
+  --bg:#0b0e14;--bg2:#11151f;--bg3:#171d2b;--border:#232a3a;
+  --text:#e6e9f0;--muted:#8b93a7;--accent:#7c5cff;--ok:#34d399;--warn:#ffb454;--err:#ff5c5c;
+  --radius:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+.top{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#00d4aa);display:grid;place-items:center;font-weight:800}
+.top h1{margin:0;font-size:1rem}.top .sub{color:var(--muted);font-size:.8rem}
+.wrap{width:min(920px,94vw);margin:0 auto;padding:24px 0 48px}
+.steps{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.step{flex:1;min-width:120px;text-align:center;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);font-size:.85rem;color:var(--muted)}
+.step.on{border-color:var(--accent);color:var(--text);box-shadow:0 0 0 1px rgba(124,92,255,.35)}
+.step.done{border-color:rgba(52,211,153,.4);color:var(--ok)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.card h2{margin:0 0 8px;font-size:1.1rem}
+.muted{color:var(--muted)}.small{font-size:.85rem}
+.drop{border:2px dashed var(--border);border-radius:var(--radius);padding:36px 20px;text-align:center;background:var(--bg3);cursor:pointer;transition:.15s}
+.drop.drag{border-color:var(--accent);background:rgba(124,92,255,.08)}
+.btn{border:1px solid var(--border);background:var(--bg3);color:var(--text);padding:10px 16px;border-radius:9px;font-weight:600;cursor:pointer;font:inherit}
+.btn.primary{background:linear-gradient(135deg,var(--accent),#6a4cf5);border:none;color:#fff}
+.btn.green{background:linear-gradient(135deg,#0aa07f,#00d4aa);border:none;color:#04201a}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.list{max-height:200px;overflow:auto;font-family:ui-monospace,monospace;font-size:.78rem;background:#06080c;border:1px solid var(--border);border-radius:8px;padding:10px}
+.issue{display:flex;gap:8px;padding:8px;border-radius:8px;background:var(--bg3);margin-bottom:6px;font-size:.88rem}
+.sev{font-size:.7rem;padding:2px 8px;border-radius:999px;flex-shrink:0}
+.sev.fix{background:rgba(52,211,153,.15);color:var(--ok)}
+.sev.warn{background:rgba(255,180,84,.15);color:var(--warn)}
+.sev.info{background:rgba(124,92,255,.15);color:#b9a8ff}
+pre{background:#06080c;border:1px solid var(--border);border-radius:8px;padding:12px;overflow:auto;font-size:.78rem;max-height:240px}
+a{color:#00d4aa}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="logo">V</div>
+  <div>
+    <h1>VibeDev — Fix & Ship</h1>
+    <div class="sub">Import a project · repair it · prepare free deploy — not a from-scratch builder</div>
+  </div>
+  <div style="flex:1"></div>
+  <a class="small muted" href="index.html">Hub</a>
+</div>
+
+<div class="wrap">
+  <div class="steps">
+    <div class="step on" id="s1">1 · Import</div>
+    <div class="step" id="s2">2 · Fix</div>
+    <div class="step" id="s3">3 · Ship</div>
+  </div>
+
+  <!-- IMPORT -->
+  <div class="card" id="panel-import">
+    <h2>Import project</h2>
+    <p class="muted small">Upload a <b>.zip</b> or select multiple files from an existing project. VibeDev does not invent apps from ideas.</p>
+    <div class="drop" id="drop">
+      <div style="font-size:2rem;margin-bottom:8px">📦</div>
+      <b>Drop zip here</b> or click to choose files<br/>
+      <span class="small muted">.zip preferred · or multi-select source files</span>
+      <input type="file" id="fileInput" multiple accept=".zip,.js,.ts,.tsx,.jsx,.py,.html,.css,.json,.md,.txt,.yml,.yaml,.toml,.env,.gitignore" style="display:none"/>
+    </div>
+    <div id="importMeta" class="small muted" style="margin-top:12px"></div>
+    <div class="list hidden" id="fileList"></div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn primary" id="btnFix" disabled>Continue to Fix →</button>
+    </div>
+  </div>
+
+  <!-- FIX -->
+  <div class="card hidden" id="panel-fix">
+    <h2>Fix & clean</h2>
+    <p class="muted small">Automatic repairs that remove junk and fill common gaps. No AI key required for these fixes.</p>
+    <div class="row" style="margin-bottom:12px">
+      <button class="btn primary" id="runFix">Run repairs</button>
+      <span class="small muted" id="fixStatus"></span>
+    </div>
+    <div id="fixLog"></div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn" id="backImport">← Back</button>
+      <button class="btn primary" id="btnShip" disabled>Continue to Ship →</button>
+    </div>
+  </div>
+
+  <!-- SHIP -->
+  <div class="card hidden" id="panel-ship">
+    <h2>Ship (deploy prep)</h2>
+    <p class="muted small">VibeDev prepares deploy files. You push to GitHub and connect a free host once — no complex local server required.</p>
+    <div class="row" style="margin-bottom:12px">
+      <button class="btn green" id="genDeploy">Generate deploy pack</button>
+      <button class="btn" id="downloadPack" disabled>Download fixed project (.json)</button>
+    </div>
+    <div id="shipOut"></div>
+    <div class="card" style="margin-top:12px;background:var(--bg3)">
+      <h2 style="font-size:1rem">Checklist to go live</h2>
+      <ol class="small" style="margin:0;padding-left:18px;color:var(--muted)">
+        <li>Download the pack (or copy files from preview)</li>
+        <li>Create a GitHub repo and push the fixed files</li>
+        <li>Open <a href="https://render.com" target="_blank" rel="noopener">Render</a> (free) → New Web Service → connect the repo</li>
+        <li>If static HTML only: use GitHub Pages or jsDelivr CDN on the raw files</li>
+        <li>Open the URL Render / Pages gives you</li>
+      </ol>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn" id="backFix">← Back</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script>
+const state = { files: [], fixed: false, deploy: null };
+
+const $ = (id) => document.getElementById(id);
+const drop = $('drop');
+const fileInput = $('fileInput');
+
+function setStep(n) {
+  [1,2,3].forEach(i => {
+    const el = $('s' + i);
+    el.classList.remove('on','done');
+    if (i < n) el.classList.add('done');
+    if (i === n) el.classList.add('on');
+  });
+  $('panel-import').classList.toggle('hidden', n !== 1);
+  $('panel-fix').classList.toggle('hidden', n !== 2);
+  $('panel-ship').classList.toggle('hidden', n !== 3);
+}
+
+function renderList() {
+  const list = $('fileList');
+  if (!state.files.length) {
+    list.classList.add('hidden');
+    $('importMeta').textContent = '';
+    $('btnFix').disabled = true;
+    return;
+  }
+  list.classList.remove('hidden');
+  list.innerHTML = state.files.map(f => f.path + '  (' + f.content.length + ' chars)').join('\n');
+  $('importMeta').textContent = state.files.length + ' file(s) loaded';
+  $('btnFix').disabled = false;
+}
+
+async function loadZip(file) {
+  const zip = await JSZip.loadAsync(file);
+  const files = [];
+  const junk = /(^|\/)(__MACOSX|\.DS_Store|node_modules\/|\.git\/)/;
+  const entries = Object.keys(zip.files).filter(p => !zip.files[p].dir && !junk.test(p));
+  // unwrap single root folder
+  let prefix = '';
+  const tops = new Set(entries.map(p => p.split('/')[0]));
+  if (tops.size === 1 && entries.every(p => p.includes('/'))) {
+    prefix = [...tops][0] + '/';
+  }
+  for (const path of entries) {
+    const rel = prefix && path.startsWith(prefix) ? path.slice(prefix.length) : path;
+    if (!rel) continue;
+    try {
+      const content = await zip.files[path].async('string');
+      files.push({ path: rel, content });
+    } catch {
+      // skip binary
+    }
+  }
+  state.files = files;
+  state.fixed = false;
+  renderList();
+}
+
+async function loadFiles(fileList) {
+  const files = [];
+  for (const f of fileList) {
+    if (f.name.endsWith('.zip')) {
+      await loadZip(f);
+      return;
+    }
+    const content = await f.text();
+    files.push({ path: f.webkitRelativePath || f.name, content });
+  }
+  if (files.length) {
+    state.files = files;
+    state.fixed = false;
+    renderList();
+  }
+}
+
+drop.onclick = () => fileInput.click();
+drop.ondragover = (e) => { e.preventDefault(); drop.classList.add('drag'); };
+drop.ondragleave = () => drop.classList.remove('drag');
+drop.ondrop = async (e) => {
+  e.preventDefault();
+  drop.classList.remove('drag');
+  await loadFiles([...e.dataTransfer.files]);
+};
+fileInput.onchange = async () => {
+  if (fileInput.files?.length) await loadFiles([...fileInput.files]);
+};
+
+$('btnFix').onclick = () => setStep(2);
+$('backImport').onclick = () => setStep(1);
+$('backFix').onclick = () => setStep(2);
+
+function hasPath(name) {
+  return state.files.some(f => f.path === name || f.path.endsWith('/' + name));
+}
+
+function runRepairs() {
+  const log = [];
+  const paths = new Set(state.files.map(f => f.path));
+
+  // Clean text files
+  let cleaned = 0;
+  state.files = state.files.map(f => {
+    let c = f.content;
+    const before = c;
+    c = c.replace(/[ \t]+$/gm, ''); // trailing spaces
+    c = c.replace(/\r\n/g, '\n');
+    if (!c.endsWith('\n') && c.length) c += '\n';
+    if (c !== before) cleaned++;
+    return { path: f.path, content: c };
+  });
+  if (cleaned) log.push({ sev: 'fix', msg: 'Cleaned trailing whitespace / line endings in ' + cleaned + ' file(s)' });
+
+  // Remove empty junk names already filtered on import
+  log.push({ sev: 'info', msg: 'Ignored common junk paths (__MACOSX, .DS_Store, node_modules) on import' });
+
+  // Missing README
+  if (!hasPath('README.md')) {
+    state.files.push({
+      path: 'README.md',
+      content: '# Project\n\nRepaired and prepared with **VibeDev Fix & Ship**.\n\n## Run\n\nFollow package manager files in this repo (`package.json` or `requirements.txt`) if present.\n\n## Deploy\n\nSee `render.yaml` if generated, or host static files via GitHub Pages / jsDelivr.\n\nTools only — you are responsible for what you ship.\n'
+    });
+    log.push({ sev: 'fix', msg: 'Added missing README.md' });
+  }
+
+  // Missing .gitignore
+  if (!hasPath('.gitignore')) {
+    state.files.push({
+      path: '.gitignore',
+      content: 'node_modules/\n.venv/\nvenv/\n__pycache__/\n.env\n.DS_Store\ndist/\nbuild/\n*.log\n'
+    });
+    log.push({ sev: 'fix', msg: 'Added missing .gitignore' });
+  }
+
+  // Detect stack
+  const isNode = hasPath('package.json') || state.files.some(f => /\.(jsx?|tsx?)$/.test(f.path));
+  const isPy = hasPath('requirements.txt') || state.files.some(f => f.path.endsWith('.py'));
+  const isStatic = state.files.some(f => f.path.endsWith('.html')) && !isPy;
+
+  if (isNode && !hasPath('package.json')) {
+    log.push({ sev: 'warn', msg: 'JS/TS files found but no package.json — add one before Node deploy' });
+  }
+  if (isPy && !hasPath('requirements.txt')) {
+    state.files.push({ path: 'requirements.txt', content: 'fastapi==0.115.0\nuvicorn[standard]==0.30.6\n' });
+    log.push({ sev: 'fix', msg: 'Added starter requirements.txt for Python' });
+  }
+  if (!isNode && !isPy && isStatic) {
+    log.push({ sev: 'info', msg: 'Detected static site — best free hosts: GitHub Pages or jsDelivr' });
+  }
+
+  state.fixed = true;
+  state.stack = { isNode, isPy, isStatic };
+  $('btnShip').disabled = false;
+  $('fixStatus').textContent = 'Repairs complete';
+  $('fixLog').innerHTML = log.map(i =>
+    '<div class="issue"><span class="sev ' + i.sev + '">' + i.sev + '</span><div>' + i.msg + '</div></div>'
+  ).join('');
+}
+
+$('runFix').onclick = runRepairs;
+$('btnShip').onclick = () => setStep(3);
+
+function generateDeploy() {
+  const { isNode, isPy, isStatic } = state.stack || {};
+  const added = [];
+
+  if (isPy) {
+    const yaml = `services:\n  - type: web\n    name: vibedev-app\n    runtime: python\n    buildCommand: pip install -r requirements.txt\n    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT\n    plan: free\n`;
+    upsert('render.yaml', yaml);
+    added.push('render.yaml (Python / Render free)');
+  } else if (isNode) {
+    const yaml = `services:\n  - type: web\n    name: vibedev-app\n    runtime: node\n    buildCommand: npm install\n    startCommand: npm start\n    plan: free\n`;
+    upsert('render.yaml', yaml);
+    added.push('render.yaml (Node / Render free)');
+  } else {
+    const note = `# Static deploy\n\nPush this folder to GitHub, then:\n- GitHub Pages, or\n- jsDelivr: https://cdn.jsdelivr.net/gh/USER/REPO@BRANCH/path/to/index.html\n`;
+    upsert('DEPLOY_STATIC.md', note);
+    added.push('DEPLOY_STATIC.md');
+  }
+
+  state.deploy = added;
+  $('downloadPack').disabled = false;
+  $('shipOut').innerHTML =
+    '<p class="small" style="color:var(--ok)">Deploy pack ready.</p>' +
+    '<div class="list">' + state.files.map(f => f.path).join('\n') + '</div>' +
+    '<p class="small muted">Added/updated: ' + added.join(', ') + '</p>';
+}
+
+function upsert(path, content) {
+  const i = state.files.findIndex(f => f.path === path);
+  if (i >= 0) state.files[i].content = content;
+  else state.files.push({ path, content });
+}
+
+$('genDeploy').onclick = generateDeploy;
+$('downloadPack').onclick = () => {
+  const pack = {
+    product: 'VibeDev Fix & Ship',
+    files: state.files,
+    note: 'Extract each path/content into a folder, then git push + connect Render or Pages.'
+  };
+  const blob = new Blob([JSON.stringify(pack, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'vibedev-fixed-project.json';
+  a.click();
+};
+
+setStep(1);
+</script>
+</body>
+</html>

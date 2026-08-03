@@ -3,83 +3,81 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>KCN Vibe Developer — Ship Without Fear</title>
-<meta name="description" content="KCN Vibe Developer. Ship Without Fear. We End Broken Deployments. Import, fix, deploy, verify, heal."/>
+<title>VibeDev Fleet Hub — KCN</title>
+<meta name="description" content="VibeDev Fleet Hub. KCN Vibe Developer — Ship Without Fear. We End Broken Deployments."/>
 <style>
-:root{
-  --bg:#06080d;--card:#0e131c;--border:#1e2838;--text:#eef3fb;--muted:#8b98b0;
-  --accent:#7c5cff;--ok:#3dd68c;--warn:#ffb454;--err:#ff6b6b;
-}
+:root{--bg:#0a0b10;--card:#12141c;--line:#2a2f3d;--text:#f2f4f8;--muted:#9aa3b5;--accent:#8b6cff}
 *{box-sizing:border-box}
 body{margin:0;font-family:Inter,system-ui,sans-serif;background:
-  radial-gradient(1000px 500px at 10% -20%,#2a1850,transparent 50%),
-  radial-gradient(800px 400px at 100% 0%,#0a2a35,transparent 45%),var(--bg);
+  radial-gradient(900px 420px at 10% -15%,rgba(139,108,255,.2),transparent 50%),var(--bg);
   color:var(--text);line-height:1.55}
-.nav{display:flex;align-items:center;gap:14px;padding:14px 4vw;border-bottom:1px solid var(--border)}
-.logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#00d4aa);display:grid;place-items:center;font-weight:900;font-size:.95rem}
-.brand{font-weight:800;letter-spacing:-.02em}.brand span{color:var(--muted);font-weight:600;font-size:.85rem;display:block}
-.nav a{color:var(--muted);text-decoration:none;font-size:.9rem}.nav .sp{flex:1}
-.btn{display:inline-block;padding:12px 20px;border-radius:12px;font-weight:700;text-decoration:none;border:0;cursor:pointer;font:inherit}
-.btn-p{background:linear-gradient(135deg,var(--accent),#5b9dff);color:#061018}
-.btn-g{background:transparent;border:1px solid var(--border);color:var(--text)}
-.hero{width:min(960px,92vw);margin:0 auto;padding:56px 0 32px;text-align:center}
-.tag{display:inline-block;padding:6px 14px;border-radius:999px;border:1px solid rgba(61,214,140,.35);color:var(--ok);font-size:.8rem;font-weight:600;margin-bottom:16px}
-.hero h1{font-size:clamp(2.2rem,5vw,3.4rem);margin:0 0 8px;letter-spacing:-.03em;line-height:1.1}
-.slogan{font-size:clamp(1.1rem,2.5vw,1.45rem);color:#c5d0e6;margin:0 0 8px;font-weight:600}
-.sub{color:var(--muted);max-width:560px;margin:0 auto 24px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;width:min(960px,92vw);margin:28px auto;text-align:left}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
-.card h3{margin:0 0 6px;font-size:1rem}.card p{margin:0;color:var(--muted);font-size:.88rem}
-.section{width:min(960px,92vw);margin:0 auto;padding:24px 0 64px}
-.section h2{text-align:center;margin:0 0 8px}.section .lead{text-align:center;color:var(--muted);margin:0 0 20px}
-footer{border-top:1px solid var(--border);padding:20px 4vw;color:var(--muted);font-size:.85rem;text-align:center}
+.nav{display:flex;align-items:center;gap:12px;padding:14px 4vw;border-bottom:1px solid var(--line)}
+.logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#00d4aa);display:grid;place-items:center;font-weight:900;font-size:.7rem}
+.sp{flex:1}
+.nav a{color:var(--muted);text-decoration:none;font-size:.9rem;margin-left:14px}
+.wrap{width:min(900px,92vw);margin:0 auto;padding:40px 0 64px}
+h1{margin:0 0 8px;font-size:clamp(1.8rem,4vw,2.4rem);letter-spacing:-.03em}
+.lead{color:var(--muted);max-width:540px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:16px 0}
+.card h2{margin:0 0 6px;font-size:1.15rem}
+.card p{margin:0;color:var(--muted);font-size:.92rem}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);margin-bottom:8px}
+.tag.live{color:#3dd68c;border-color:rgba(61,214,140,.4)}
+.tag.new{color:#8b6cff;border-color:rgba(139,108,255,.45)}
+.btn{display:inline-block;margin-top:14px;padding:11px 18px;border-radius:11px;background:linear-gradient(135deg,var(--accent),#5b9dff);color:#0a0b10;font-weight:700;text-decoration:none}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+.primary{border-color:rgba(139,108,255,.5);box-shadow:0 0 0 1px rgba(139,108,255,.15)}
+footer{border-top:1px solid var(--line);padding:18px 4vw;text-align:center;color:var(--muted);font-size:.82rem}
 </style>
 </head>
 <body>
 <header class="nav">
   <div class="logo">KCN</div>
-  <div class="brand">Vibe Developer<span>Ship Without Fear</span></div>
+  <strong>VibeDev Fleet Hub</strong>
   <div class="sp"></div>
-  <a href="#loop">The loop</a>
-  <a href="github-app.html">GitHub App</a>
-  <a class="btn btn-p" href="app.html">Open app</a>
+  <a href="app.html">VibeDev</a>
+  <a href="create-api.html">Create API</a>
 </header>
+<div class="wrap">
+  <h1>VibeDev Fleet Hub</h1>
+  <p class="lead">The command center for building, fixing, and shipping software — tools from the KCN ecosystem.</p>
 
-<section class="hero">
-  <div class="tag">WE END BROKEN DEPLOYMENTS</div>
-  <h1>KCN Vibe Developer</h1>
-  <p class="slogan">Ship Without Fear.</p>
-  <p class="sub">Import a real project. We fix it, put it online, check that it actually works, and heal it when it doesn’t.</p>
-  <a class="btn btn-p" href="app.html">Start shipping</a>
-  <a class="btn btn-g" href="#loop">See how</a>
-</section>
-
-<div class="grid">
-  <div class="card"><h3>Import</h3><p>Your existing project — zip or files. Not an idea generator.</p></div>
-  <div class="card"><h3>Fix</h3><p>Clean junk, fill gaps, block secrets, stack-aware prep.</p></div>
-  <div class="card"><h3>Ship</h3><p>GitHub Pages or Render with clear defaults.</p></div>
-  <div class="card"><h3>Verify &amp; heal</h3><p>Live health check. One-click repair + redeploy.</p></div>
-</div>
-
-<section class="section" id="loop">
-  <h2>The Ship Without Fear loop</h2>
-  <p class="lead">Most tools stop at “pushed.” We stop when it’s actually alive.</p>
-  <div class="grid">
-    <div class="card"><h3>1. Secrets shield</h3><p>Blocks .env and obvious keys before they hit a public repo.</p></div>
-    <div class="card"><h3>2. Stack defaults</h3><p>HTML → Pages. Node/Python → Render-ready tree.</p></div>
-    <div class="card"><h3>3. Live health</h3><p>Fetch the URL. Catch blank pages, hard failures, obvious 404 patterns.</p></div>
-    <div class="card"><h3>4. One-click heal</h3><p>Apply the next fix and ship again without starting over.</p></div>
-    <div class="card"><h3>5. Ship card</h3><p>Shareable summary: live link, what changed, health status.</p></div>
-    <div class="card"><h3>6. Re-ship</h3><p>Drop an update of the same project. We fix the delta and redeploy.</p></div>
+  <div class="card primary">
+    <span class="tag live">MAIN PRODUCT</span>
+    <h2>KCN Vibe Developer — Fix &amp; Ship</h2>
+    <p><b>Ship Without Fear.</b> We End Broken Deployments.</p>
+    <p style="margin-top:8px">Import → repair → deploy → verify live apps → heal if broken.</p>
+    <a class="btn" href="app.html">Open VibeDev</a>
   </div>
-  <p style="text-align:center;margin-top:28px">
-    <a class="btn btn-p" href="app.html">Open KCN Vibe Developer</a>
-  </p>
-</section>
 
+  <div class="card">
+    <span class="tag new">NEW</span>
+    <h2>Create API</h2>
+    <p>FastAPI or Express foundations, routes, health endpoints, deploy configs.</p>
+    <a class="btn ghost" href="create-api.html">Open Create API</a>
+  </div>
+
+  <div class="card">
+    <span class="tag live">LIVE</span>
+    <h2>KCN Singularity Studio</h2>
+    <p>Human-governed intelligence workspace concepts and domain studios.</p>
+    <a class="btn ghost" href="https://cdn.jsdelivr.net/gh/Evank253/KCN_SINGULARITY_MASTER@Main-pr/docs/index.html" target="_blank" rel="noopener">Open Studio</a>
+  </div>
+
+  <div class="card">
+    <span class="tag live">LIVE</span>
+    <h2>KCN Super Cognitive Demo</h2>
+    <p>Human-governed intelligence ecosystem public demo.</p>
+    <a class="btn ghost" href="https://cdn.jsdelivr.net/gh/Evank253/KCN-SUPER-COGNITIVE-HUMAN-GOVERNED-INTELLIGENCE-ECOSYSTEM-@copilot/kcn-super-cognitive-ecosystem/public-demo/index.html" target="_blank" rel="noopener">Open Demo</a>
+  </div>
+
+  <div class="card">
+    <h2>Platform stack</h2>
+    <p>GitHub Pages · jsDelivr · Render · free hosting workflows</p>
+  </div>
+</div>
 <footer>
-  <strong>KCN Vibe Developer</strong> · Ship Without Fear. · We End Broken Deployments.<br/>
-  Tools only. You are responsible for what you ship.
+  KCN · VibeDev Fleet Hub · Tools only. You are responsible for what you ship.
 </footer>
 </body>
 </html>

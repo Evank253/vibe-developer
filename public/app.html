@@ -3,155 +3,578 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>VibeDev — Fix & Ship</title>
+<title>KCN Vibe Developer — Ship Without Fear</title>
 <style>
-:root{--bg:#0b0e14;--bg2:#11151f;--bg3:#171d2b;--border:#232a3a;--text:#e6e9f0;--muted:#8b93a7;--accent:#7c5cff;--ok:#34d399;--warn:#ffb454;--err:#ff5c5c;--radius:12px}
+:root{--bg:#06080d;--bg2:#0e131c;--bg3:#141b28;--border:#1e2838;--text:#eef3fb;--muted:#8b98b0;--accent:#7c5cff;--ok:#3dd68c;--warn:#ffb454;--err:#ff6b6b;--radius:12px}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
-.top{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--bg2);flex-wrap:wrap}
-.logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#00d4aa);display:grid;place-items:center;font-weight:800}
-.top h1{margin:0;font-size:1rem}.top .sub{color:var(--muted);font-size:.8rem}
-.wrap{width:min(920px,94vw);margin:0 auto;padding:24px 0 48px}
-.steps{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-.step{flex:1;min-width:120px;text-align:center;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);font-size:.85rem;color:var(--muted)}
-.step.on{border-color:var(--accent);color:var(--text)}.step.done{border-color:rgba(52,211,153,.4);color:var(--ok)}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px}
-.card h2{margin:0 0 8px;font-size:1.1rem}.muted{color:var(--muted)}.small{font-size:.85rem}
-.drop{border:2px dashed var(--border);border-radius:var(--radius);padding:36px 20px;text-align:center;background:var(--bg3);cursor:pointer}.drop.drag{border-color:var(--accent)}
-.btn{border:1px solid var(--border);background:var(--bg3);color:var(--text);padding:10px 16px;border-radius:9px;font-weight:600;cursor:pointer;font:inherit}
-.btn.primary{background:linear-gradient(135deg,var(--accent),#6a4cf5);border:none;color:#fff}
+.top{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--border);background:var(--bg2);flex-wrap:wrap}
+.logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--accent),#00d4aa);display:grid;place-items:center;font-weight:900;font-size:.75rem}
+.top h1{margin:0;font-size:1rem}.top .sub{color:var(--muted);font-size:.78rem}
+.wrap{width:min(940px,94vw);margin:0 auto;padding:20px 0 48px}
+.steps{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.step{flex:1;min-width:90px;text-align:center;padding:9px 6px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);font-size:.78rem;color:var(--muted)}
+.step.on{border-color:var(--accent);color:var(--text)}.step.done{border-color:rgba(61,214,140,.4);color:var(--ok)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.card h2{margin:0 0 8px;font-size:1.05rem}.muted{color:var(--muted)}.small{font-size:.85rem}
+.drop{border:2px dashed var(--border);border-radius:var(--radius);padding:32px 16px;text-align:center;background:var(--bg3);cursor:pointer}.drop.drag{border-color:var(--accent)}
+.btn{border:1px solid var(--border);background:var(--bg3);color:var(--text);padding:10px 14px;border-radius:9px;font-weight:600;cursor:pointer;font:inherit}
+.btn.primary{background:linear-gradient(135deg,var(--accent),#5b9dff);border:none;color:#061018}
 .btn.green{background:linear-gradient(135deg,#0aa07f,#00d4aa);border:none;color:#04201a}
+.btn.warn{background:linear-gradient(135deg,#a67c20,#ffb454);border:none;color:#1a1200}
 .btn:disabled{opacity:.45;cursor:not-allowed}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.list{max-height:180px;overflow:auto;font-family:ui-monospace,monospace;font-size:.78rem;background:#06080c;border:1px solid var(--border);border-radius:8px;padding:10px}
-.issue{display:flex;gap:8px;padding:8px;border-radius:8px;background:var(--bg3);margin-bottom:6px;font-size:.88rem}
-.sev{font-size:.7rem;padding:2px 8px;border-radius:999px;flex-shrink:0}
-.sev.fix{background:rgba(52,211,153,.15);color:var(--ok)}.sev.warn{background:rgba(255,180,84,.15);color:var(--warn)}.sev.info{background:rgba(124,92,255,.15);color:#b9a8ff}.sev.err{background:rgba(255,92,92,.15);color:var(--err)}
-input,select{width:100%;padding:10px 12px;border-radius:9px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font:inherit;margin-top:4px}
-label{display:block;font-size:.8rem;color:var(--muted);margin-top:10px}a{color:#00d4aa}.hidden{display:none}
-.badge{font-size:.75rem;padding:3px 8px;border-radius:999px;border:1px solid var(--border);color:var(--muted)}.badge.on{color:var(--ok);border-color:rgba(52,211,153,.4)}
-.note{border:1px solid #3a3420;background:#1a1608;color:#ffe7a3;border-radius:10px;padding:10px 12px;font-size:.85rem;margin:10px 0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.list{max-height:160px;overflow:auto;font-family:ui-monospace,monospace;font-size:.75rem;background:#05070b;border:1px solid var(--border);border-radius:8px;padding:10px}
+.issue{display:flex;gap:8px;padding:8px;border-radius:8px;background:var(--bg3);margin-bottom:6px;font-size:.86rem}
+.sev{font-size:.68rem;padding:2px 7px;border-radius:999px;flex-shrink:0;text-transform:uppercase}
+.sev.fix{background:rgba(61,214,140,.15);color:var(--ok)}.sev.warn{background:rgba(255,180,84,.15);color:var(--warn)}.sev.info{background:rgba(124,92,255,.15);color:#b9a8ff}.sev.err{background:rgba(255,107,107,.15);color:var(--err)}.sev.block{background:rgba(255,107,107,.25);color:#ffb4b4}
+input,select,textarea{width:100%;padding:9px 11px;border-radius:9px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font:inherit;margin-top:4px}
+label{display:block;font-size:.78rem;color:var(--muted);margin-top:10px}a{color:#7ec8ff}.hidden{display:none}
+.badge{font-size:.72rem;padding:3px 8px;border-radius:999px;border:1px solid var(--border);color:var(--muted)}.badge.on{color:var(--ok);border-color:rgba(61,214,140,.4)}
+.note{border:1px solid #3a3420;background:#161208;color:#ffe7a3;border-radius:10px;padding:10px 12px;font-size:.84rem;margin:10px 0}
+.health{border-radius:12px;padding:14px;border:1px solid var(--border);margin-top:10px}
+.health.ok{border-color:rgba(61,214,140,.45);background:rgba(61,214,140,.08)}
+.health.bad{border-color:rgba(255,107,107,.45);background:rgba(255,107,107,.08)}
+.health.warn{border-color:rgba(255,180,84,.45);background:rgba(255,180,84,.08)}
+.shipcard{background:#0a0e16;border:1px solid var(--border);border-radius:12px;padding:14px;font-size:.88rem;margin-top:10px}
+.shipcard h3{margin:0 0 8px;font-size:1rem}
 </style>
 </head>
 <body>
 <div class="top">
-  <div class="logo">V</div>
-  <div><h1>VibeDev — Fix & Ship</h1><div class="sub">Website app · GitHub-connected</div></div>
+  <div class="logo">KCN</div>
+  <div>
+    <h1>KCN Vibe Developer</h1>
+    <div class="sub">Ship Without Fear · We End Broken Deployments</div>
+  </div>
   <div style="flex:1"></div>
   <span class="badge" id="ghBadge">GitHub not linked</span>
   <a class="small muted" href="index.html">Site</a>
-  <a class="small muted" href="github-app.html">GitHub App</a>
 </div>
+
 <div class="wrap">
   <div class="steps">
-    <div class="step on" id="s1">1 · Import</div>
-    <div class="step" id="s2">2 · Fix</div>
-    <div class="step" id="s3">3 · Ship</div>
+    <div class="step on" id="s1">1 Import</div>
+    <div class="step" id="s2">2 Fix</div>
+    <div class="step" id="s3">3 Ship</div>
+    <div class="step" id="s4">4 Verify</div>
   </div>
+
+  <!-- IMPORT -->
   <div class="card" id="panel-import">
     <h2>Import project</h2>
-    <p class="muted small">Existing projects only. Drop a <b>.zip</b> or choose files.</p>
-    <div class="drop" id="drop"><div style="font-size:2rem">📦</div><b>Drop zip</b> or click to choose<input type="file" id="fileInput" multiple accept=".zip,.js,.ts,.tsx,.jsx,.py,.html,.css,.json,.md,.txt,.yml,.yaml,.gitignore" style="display:none"/></div>
-    <div id="importMeta" class="small muted" style="margin-top:12px"></div>
+    <p class="muted small">Existing projects only. Re-import an update of the same app anytime to re-ship.</p>
+    <div class="drop" id="drop">
+      <div style="font-size:1.8rem">📦</div>
+      <b>Drop .zip</b> or click to choose files
+      <input type="file" id="fileInput" multiple accept=".zip,.js,.ts,.tsx,.jsx,.py,.html,.css,.json,.md,.txt,.yml,.yaml,.toml,.gitignore,.env" style="display:none"/>
+    </div>
+    <div id="importMeta" class="small muted" style="margin-top:10px"></div>
     <div class="list hidden" id="fileList"></div>
-    <div class="row" style="margin-top:14px"><button class="btn primary" id="btnFix" disabled>Continue to Fix →</button></div>
+    <div class="row" style="margin-top:12px"><button class="btn primary" id="btnFix" disabled>Continue to Fix →</button></div>
   </div>
+
+  <!-- FIX -->
   <div class="card hidden" id="panel-fix">
-    <h2>Fix & clean</h2>
-    <div class="row" style="margin-bottom:12px"><button class="btn primary" id="runFix">Run repairs</button><span class="small muted" id="fixStatus"></span></div>
+    <h2>Fix · secrets shield · stack prep</h2>
+    <div class="row" style="margin-bottom:10px">
+      <button class="btn primary" id="runFix">Run repairs</button>
+      <span class="small muted" id="fixStatus"></span>
+    </div>
     <div id="fixLog"></div>
-    <div class="row" style="margin-top:14px"><button class="btn" id="backImport">← Back</button><button class="btn primary" id="btnShip" disabled>Continue to Ship →</button></div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn" id="backImport">← Back</button>
+      <button class="btn primary" id="btnShip" disabled>Continue to Ship →</button>
+    </div>
   </div>
+
+  <!-- SHIP -->
   <div class="card hidden" id="panel-ship">
-    <h2>Ship — GitHub</h2>
-    <div class="note">Prefer <a href="github-app.html">GitHub App / OAuth Client ID</a>. Fallback: classic PAT with <code>repo</code> scope — only paste in this page, never in chat.</div>
-    <div class="card" style="background:var(--bg3);margin-top:0">
-      <h2 style="font-size:1rem">Sign in with GitHub (Device flow)</h2>
-      <p class="small muted">Uses Client ID from GitHub App setup. Opens a user code on GitHub.</p>
-      <button class="btn primary" id="btnDevice" type="button">Sign in with GitHub</button>
-      <div id="deviceBox" class="small" style="margin-top:10px"></div>
-      <hr style="border-color:var(--border);margin:16px 0"/>
-      <label>Or paste PAT (fallback)</label>
+    <h2>Ship</h2>
+    <div class="note">Connect GitHub here only — never paste tokens in chat. Prefer Client ID on the GitHub App page.</div>
+    <div class="card" style="background:var(--bg3);margin:0">
+      <button class="btn primary" id="btnDevice" type="button">Sign in with GitHub (device)</button>
+      <div id="deviceBox" class="small" style="margin-top:8px"></div>
+      <label>Or PAT (repo scope)</label>
       <input id="ghToken" type="password" placeholder="ghp_…" autocomplete="off"/>
-      <div class="row" style="margin-top:10px"><button class="btn" id="btnGhConnect">Connect with token</button><span class="small" id="ghUser"></span></div>
-      <label>New repo name</label>
+      <div class="row" style="margin-top:8px"><button class="btn" id="btnGhConnect">Connect token</button><span class="small" id="ghUser"></span></div>
+      <label>Repo name</label>
       <input id="repoName" placeholder="my-fixed-app"/>
       <label>Visibility</label>
-      <select id="repoVis"><option value="public">public</option><option value="private">private</option></select>
-      <label>Target</label>
-      <select id="target"><option value="pages">GitHub Pages</option><option value="render">Render (API key below)</option></select>
-      <div id="renderBox" class="hidden">
-        <label>Render API key</label>
-        <input id="renderKey" type="password" placeholder="rnd_…" autocomplete="off"/>
-      </div>
-      <div class="row" style="margin-top:14px">
-        <button class="btn green" id="btnDeploy" disabled>Deploy automatically</button>
+      <select id="repoVis"><option value="public">public (needed for free user Pages)</option><option value="private">private</option></select>
+      <label>Deploy target (stack-aware default applied after Fix)</label>
+      <select id="target">
+        <option value="pages">GitHub Pages — static / HTML</option>
+        <option value="render">Render-ready — Node or Python (push + instructions)</option>
+      </select>
+      <div class="row" style="margin-top:12px">
+        <button class="btn green" id="btnDeploy" disabled>Ship to GitHub</button>
         <button class="btn" id="downloadPack" disabled>Download pack</button>
       </div>
-      <div id="deployLog" style="margin-top:12px"></div>
+      <div id="deployLog" style="margin-top:10px"></div>
     </div>
-    <button class="btn" id="backFix">← Back</button>
+    <button class="btn" id="backFix" style="margin-top:10px">← Back</button>
+  </div>
+
+  <!-- VERIFY -->
+  <div class="card hidden" id="panel-verify">
+    <h2>Verify · heal · Ship card</h2>
+    <p class="muted small">We check the live URL. If it’s broken, heal and re-ship without starting over.</p>
+    <label>Live URL to check</label>
+    <input id="liveUrl" placeholder="https://you.github.io/repo/"/>
+    <div class="row" style="margin-top:10px">
+      <button class="btn primary" id="btnHealth">Run health check</button>
+      <button class="btn warn" id="btnHeal" disabled>One-click heal &amp; re-ship</button>
+    </div>
+    <div id="healthBox" class="health hidden"></div>
+    <div id="shipCard" class="shipcard hidden"></div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn" id="backShip">← Ship</button>
+      <button class="btn" id="btnCopyCard" disabled>Copy Ship card</button>
+      <button class="btn primary" id="btnNew">Ship another / re-import</button>
+    </div>
   </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
-const state={files:[],fixed:false,gh:null,stack:null};
-const $=id=>document.getElementById(id);
-function setStep(n){[1,2,3].forEach(i=>{const el=$('s'+i);el.classList.remove('on','done');if(i<n)el.classList.add('done');if(i===n)el.classList.add('on');});$('panel-import').classList.toggle('hidden',n!==1);$('panel-fix').classList.toggle('hidden',n!==2);$('panel-ship').classList.toggle('hidden',n!==3);}
-function logDeploy(sev,msg){const d=document.createElement('div');d.className='issue';d.innerHTML='<span class="sev '+sev+'">'+sev+'</span><div>'+msg+'</div>';$('deployLog').appendChild(d);}
-function renderList(){const list=$('fileList');if(!state.files.length){list.classList.add('hidden');$('importMeta').textContent='';$('btnFix').disabled=true;return;}list.classList.remove('hidden');list.innerHTML=state.files.map(f=>f.path+' ('+f.content.length+')').join('\n');$('importMeta').textContent=state.files.length+' file(s)';$('btnFix').disabled=false;}
-async function loadZip(file){const zip=await JSZip.loadAsync(file);const files=[];const junk=/(^|\/)(__MACOSX|\.DS_Store|node_modules\/|\.git\/)/;const entries=Object.keys(zip.files).filter(p=>!zip.files[p].dir&&!junk.test(p));let prefix='';const tops=new Set(entries.map(p=>p.split('/')[0]));if(tops.size===1&&entries.every(p=>p.includes('/')))prefix=[...tops][0]+'/';for(const path of entries){const rel=prefix&&path.startsWith(prefix)?path.slice(prefix.length):path;if(!rel)continue;try{files.push({path:rel,content:await zip.files[path].async('string')});}catch{}}state.files=files;state.fixed=false;renderList();}
-async function loadFiles(fileList){const files=[];for(const f of fileList){if(f.name.endsWith('.zip')){await loadZip(f);return;}files.push({path:f.webkitRelativePath||f.name,content:await f.text()});}if(files.length){state.files=files;state.fixed=false;renderList();}}
-const drop=$('drop'),fileInput=$('fileInput');
-drop.onclick=()=>fileInput.click();drop.ondragover=e=>{e.preventDefault();drop.classList.add('drag');};drop.ondragleave=()=>drop.classList.remove('drag');
-drop.ondrop=async e=>{e.preventDefault();drop.classList.remove('drag');await loadFiles([...e.dataTransfer.files]);};
-fileInput.onchange=async()=>{if(fileInput.files?.length)await loadFiles([...fileInput.files]);};
-$('btnFix').onclick=()=>setStep(2);$('backImport').onclick=()=>setStep(1);$('backFix').onclick=()=>setStep(2);$('btnShip').onclick=()=>setStep(3);
-function hasPath(name){return state.files.some(f=>f.path===name||f.path.endsWith('/'+name));}
-function upsert(path,content){const i=state.files.findIndex(f=>f.path===path);if(i>=0)state.files[i].content=content;else state.files.push({path,content});}
-function runRepairs(){let cleaned=0;const log=[];state.files=state.files.map(f=>{let c=f.content.replace(/[ \t]+$/gm,'').replace(/\r\n/g,'\n');if(c.length&&!c.endsWith('\n'))c+='\n';if(c!==f.content)cleaned++;return{path:f.path,content:c};});if(cleaned)log.push({sev:'fix',msg:'Cleaned '+cleaned+' file(s)'});if(!hasPath('README.md')){upsert('README.md','# Project\n\nRepaired with VibeDev.\n');log.push({sev:'fix',msg:'Added README.md'});}if(!hasPath('.gitignore')){upsert('.gitignore','node_modules/\n.venv/\n__pycache__/\n.env\n.DS_Store\n');log.push({sev:'fix',msg:'Added .gitignore'});}const isNode=hasPath('package.json')||state.files.some(f=>/\.(jsx?|tsx?)$/.test(f.path));const isPy=hasPath('requirements.txt')||state.files.some(f=>f.path.endsWith('.py'));const isStatic=state.files.some(f=>f.path.endsWith('.html'));if(isPy&&!hasPath('requirements.txt')){upsert('requirements.txt','fastapi==0.115.0\nuvicorn[standard]==0.30.6\n');log.push({sev:'fix',msg:'Added requirements.txt'});}if(isStatic&&!hasPath('index.html')){const html=state.files.find(f=>f.path.endsWith('.html'));if(html){upsert('index.html',html.content);log.push({sev:'fix',msg:'Root index.html for Pages'});}}state.stack={isNode,isPy,isStatic};state.fixed=true;$('btnShip').disabled=false;$('downloadPack').disabled=false;$('fixStatus').textContent='Done';$('fixLog').innerHTML=log.map(i=>'<div class="issue"><span class="sev '+i.sev+'">'+i.sev+'</span><div>'+i.msg+'</div></div>').join('');$('target').value=(isStatic&&!isPy)?'pages':'render';$('target').dispatchEvent(new Event('change'));}
-$('runFix').onclick=runRepairs;
-function setGh(token,login){state.gh={token,login};localStorage.setItem('vibedev_gh_token',token);localStorage.setItem('vibedev_gh_login',login);$('ghUser').textContent='@'+login;$('ghBadge').textContent='GitHub: @'+login;$('ghBadge').classList.add('on');$('btnDeploy').disabled=!state.fixed;}
-$('btnGhConnect').onclick=async()=>{const token=$('ghToken').value.trim();if(!token)return alert('Paste token');try{const res=await fetch('https://api.github.com/user',{headers:{Authorization:'Bearer '+token,Accept:'application/vnd.github+json'}});const user=await res.json();if(!res.ok)throw new Error(user.message||'Invalid');setGh(token,user.login);logDeploy('fix','Connected @'+user.login);}catch(e){alert(e.message);}};
-(function(){const t=localStorage.getItem('vibedev_gh_token'),l=localStorage.getItem('vibedev_gh_login');if(t&&l){state.gh={token:t,login:l};$('ghToken').value=t;$('ghUser').textContent='@'+l;$('ghBadge').textContent='GitHub: @'+l;$('ghBadge').classList.add('on');}})();
-$('target').onchange=()=>$('renderBox').classList.toggle('hidden',$('target').value!=='render');
-/* Device flow */
-$('btnDevice').onclick=async()=>{
-  const clientId=localStorage.getItem('vibedev_github_client_id');
-  if(!clientId){alert('Save a GitHub Client ID first on the GitHub App page.');location.href='github-app.html';return;}
-  $('deviceBox').textContent='Requesting device code…';
-  try{
-    const res=await fetch('https://github.com/login/device/code',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({client_id:clientId,scope:'repo'})});
-    const data=await res.json();
-    if(!data.user_code)throw new Error(data.error_description||data.error||'Device flow not enabled for this OAuth App');
-    $('deviceBox').innerHTML='Go to <a href="'+(data.verification_uri||'https://github.com/login/device')+'" target="_blank" rel="noopener">GitHub device login</a> and enter code: <b style="font-size:1.2rem">'+data.user_code+'</b><br/>Waiting for approval…';
-    const interval=(data.interval||5)*1000;
-    const expires=Date.now()+(data.expires_in||900)*1000;
-    const poll=async()=>{
-      if(Date.now()>expires){$('deviceBox').textContent='Code expired. Try again.';return;}
-      const r=await fetch('https://github.com/login/oauth/access_token',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({client_id:clientId,device_code:data.device_code,grant_type:'urn:ietf:params:oauth:grant-type:device_code'})});
-      const j=await r.json();
-      if(j.access_token){
-        const u=await fetch('https://api.github.com/user',{headers:{Authorization:'Bearer '+j.access_token,Accept:'application/vnd.github+json'}}).then(x=>x.json());
-        setGh(j.access_token,u.login||'user');
-        $('deviceBox').textContent='Signed in as @'+(u.login||'user');
-        logDeploy('fix','Device flow sign-in OK');
+const state = {
+  files: [], fixed: false, gh: null, stack: null,
+  lastUrl: '', lastHealth: null, fixLog: [], blocked: [], healRound: 0
+};
+const $ = id => document.getElementById(id);
+
+function setStep(n) {
+  [1,2,3,4].forEach(i => {
+    const el = $('s' + i);
+    el.classList.remove('on','done');
+    if (i < n) el.classList.add('done');
+    if (i === n) el.classList.add('on');
+  });
+  $('panel-import').classList.toggle('hidden', n !== 1);
+  $('panel-fix').classList.toggle('hidden', n !== 2);
+  $('panel-ship').classList.toggle('hidden', n !== 3);
+  $('panel-verify').classList.toggle('hidden', n !== 4);
+}
+
+function logDeploy(sev, msg) {
+  const d = document.createElement('div');
+  d.className = 'issue';
+  d.innerHTML = '<span class="sev ' + sev + '">' + sev + '</span><div>' + msg + '</div>';
+  $('deployLog').appendChild(d);
+}
+
+function renderList() {
+  const list = $('fileList');
+  if (!state.files.length) {
+    list.classList.add('hidden');
+    $('importMeta').textContent = '';
+    $('btnFix').disabled = true;
+    return;
+  }
+  list.classList.remove('hidden');
+  list.innerHTML = state.files.map(f => f.path + ' (' + f.content.length + ')').join('\n');
+  $('importMeta').textContent = state.files.length + ' file(s) loaded' + (state.healRound ? ' · heal round ' + state.healRound : '');
+  $('btnFix').disabled = false;
+}
+
+async function loadZip(file) {
+  const zip = await JSZip.loadAsync(file);
+  const files = [];
+  const junk = /(^|\/)(__MACOSX|\.DS_Store|node_modules\/|\.git\/)/;
+  const entries = Object.keys(zip.files).filter(p => !zip.files[p].dir && !junk.test(p));
+  let prefix = '';
+  const tops = new Set(entries.map(p => p.split('/')[0]));
+  if (tops.size === 1 && entries.every(p => p.includes('/'))) prefix = [...tops][0] + '/';
+  for (const path of entries) {
+    const rel = prefix && path.startsWith(prefix) ? path.slice(prefix.length) : path;
+    if (!rel) continue;
+    try { files.push({ path: rel, content: await zip.files[path].async('string') }); } catch {}
+  }
+  state.files = files; state.fixed = false; state.healRound = 0; renderList();
+}
+
+async function loadFiles(fileList) {
+  const files = [];
+  for (const f of fileList) {
+    if (f.name.endsWith('.zip')) { await loadZip(f); return; }
+    files.push({ path: f.webkitRelativePath || f.name, content: await f.text() });
+  }
+  if (files.length) { state.files = files; state.fixed = false; state.healRound = 0; renderList(); }
+}
+
+const drop = $('drop'), fileInput = $('fileInput');
+drop.onclick = () => fileInput.click();
+drop.ondragover = e => { e.preventDefault(); drop.classList.add('drag'); };
+drop.ondragleave = () => drop.classList.remove('drag');
+drop.ondrop = async e => { e.preventDefault(); drop.classList.remove('drag'); await loadFiles([...e.dataTransfer.files]); };
+fileInput.onchange = async () => { if (fileInput.files?.length) await loadFiles([...fileInput.files]); };
+
+$('btnFix').onclick = () => setStep(2);
+$('backImport').onclick = () => setStep(1);
+$('backFix').onclick = () => setStep(2);
+$('backShip').onclick = () => setStep(3);
+$('btnShip').onclick = () => setStep(3);
+$('btnNew').onclick = () => { setStep(1); };
+
+function hasPath(name) {
+  return state.files.some(f => f.path === name || f.path.endsWith('/' + name) || f.path.split('/').pop() === name);
+}
+function upsert(path, content) {
+  const i = state.files.findIndex(f => f.path === path);
+  if (i >= 0) state.files[i].content = content; else state.files.push({ path, content });
+}
+
+const SECRET_NAME = /(^|\/)(\.env|\.env\..+|.*secrets.*|credentials\.json|serviceAccount.*\.json)$/i;
+const SECRET_BODY = /(api[_-]?key\s*=\s*['"]?[a-z0-9]{20,}|sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN (RSA |OPENSSH )?PRIVATE KEY-----)/i;
+
+function runRepairs() {
+  const log = [];
+  state.blocked = [];
+  let cleaned = 0;
+
+  // Secrets shield — remove or strip
+  const kept = [];
+  for (const f of state.files) {
+    if (SECRET_NAME.test(f.path) || SECRET_BODY.test(f.content.slice(0, 8000))) {
+      state.blocked.push(f.path);
+      log.push({ sev: 'block', msg: 'Secrets shield blocked: ' + f.path });
+      continue;
+    }
+    kept.push(f);
+  }
+  state.files = kept;
+
+  state.files = state.files.map(f => {
+    let c = f.content.replace(/[ \t]+$/gm, '').replace(/\r\n/g, '\n');
+    if (c.length && !c.endsWith('\n')) c += '\n';
+    if (c !== f.content) cleaned++;
+    return { path: f.path, content: c };
+  });
+  if (cleaned) log.push({ sev: 'fix', msg: 'Cleaned ' + cleaned + ' file(s)' });
+
+  if (!hasPath('README.md')) {
+    upsert('README.md', '# Project\n\nShipped with **KCN Vibe Developer** — Ship Without Fear.\n');
+    log.push({ sev: 'fix', msg: 'Added README.md' });
+  }
+  if (!hasPath('.gitignore')) {
+    upsert('.gitignore', 'node_modules/\n.venv/\n__pycache__/\n.env\n.env.*\n.DS_Store\ndist/\n.vercel\n');
+    log.push({ sev: 'fix', msg: 'Added .gitignore' });
+  }
+
+  const isNode = hasPath('package.json') || state.files.some(f => /\.(jsx?|tsx?)$/.test(f.path));
+  const isPy = hasPath('requirements.txt') || state.files.some(f => f.path.endsWith('.py'));
+  const isStatic = state.files.some(f => /\.html?$/i.test(f.path));
+
+  if (isPy && !hasPath('requirements.txt')) {
+    upsert('requirements.txt', 'fastapi==0.115.0\nuvicorn[standard]==0.30.6\n');
+    log.push({ sev: 'fix', msg: 'Added requirements.txt' });
+  }
+  if (isNode && hasPath('package.json')) {
+    try {
+      const pj = JSON.parse(state.files.find(f => f.path === 'package.json' || f.path.endsWith('/package.json')).content);
+      if (!pj.scripts) pj.scripts = {};
+      if (!pj.scripts.start && !pj.scripts.dev) {
+        pj.scripts.start = 'node index.js';
+        upsert(state.files.find(f => f.path.endsWith('package.json')).path, JSON.stringify(pj, null, 2) + '\n');
+        log.push({ sev: 'warn', msg: 'Added package.json scripts.start fallback' });
+      }
+    } catch {}
+  }
+  if (isStatic && !hasPath('index.html')) {
+    const html = state.files.find(f => /\.html?$/i.test(f.path));
+    if (html) {
+      upsert('index.html', html.content);
+      log.push({ sev: 'fix', msg: 'Root index.html for Pages (' + html.path + ')' });
+    }
+  }
+
+  // Heal extras
+  if (state.healRound > 0 && isStatic && hasPath('index.html')) {
+    let idx = state.files.find(f => f.path === 'index.html').content;
+    if (!/viewport/i.test(idx)) {
+      idx = idx.replace(/<head>/i, '<head>\n<meta name="viewport" content="width=device-width, initial-scale=1"/>');
+      upsert('index.html', idx);
+      log.push({ sev: 'fix', msg: 'Heal: added viewport meta' });
+    }
+  }
+
+  state.stack = { isNode, isPy, isStatic };
+  state.fixLog = log;
+  state.fixed = true;
+  $('btnShip').disabled = false;
+  $('downloadPack').disabled = false;
+  $('fixStatus').textContent = 'Repairs complete' + (state.blocked.length ? ' · ' + state.blocked.length + ' secret file(s) blocked' : '');
+  $('fixLog').innerHTML = log.map(i => '<div class="issue"><span class="sev ' + i.sev + '">' + i.sev + '</span><div>' + i.msg + '</div></div>').join('') || '<div class="muted small">No changes needed</div>';
+
+  // Stack-aware default
+  if (isStatic && !isPy && !isNode) $('target').value = 'pages';
+  else if (isNode || isPy) $('target').value = 'render';
+  else $('target').value = 'pages';
+}
+$('runFix').onclick = runRepairs;
+
+function setGh(token, login) {
+  state.gh = { token, login };
+  localStorage.setItem('vibedev_gh_token', token);
+  localStorage.setItem('vibedev_gh_login', login);
+  $('ghUser').textContent = '@' + login;
+  $('ghBadge').textContent = '@' + login;
+  $('ghBadge').classList.add('on');
+  $('btnDeploy').disabled = !state.fixed;
+}
+
+$('btnGhConnect').onclick = async () => {
+  const token = $('ghToken').value.trim();
+  if (!token) return alert('Paste a token on this page only');
+  try {
+    const res = await fetch('https://api.github.com/user', { headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json' } });
+    const user = await res.json();
+    if (!res.ok) throw new Error(user.message || 'Invalid token');
+    setGh(token, user.login);
+    logDeploy('fix', 'Connected @' + user.login);
+  } catch (e) { alert(e.message); }
+};
+
+(function restore() {
+  const t = localStorage.getItem('vibedev_gh_token');
+  const l = localStorage.getItem('vibedev_gh_login');
+  if (t && l) {
+    state.gh = { token: t, login: l };
+    $('ghToken').value = t;
+    $('ghUser').textContent = '@' + l;
+    $('ghBadge').textContent = '@' + l;
+    $('ghBadge').classList.add('on');
+  }
+})();
+
+$('btnDevice').onclick = async () => {
+  const clientId = localStorage.getItem('vibedev_github_client_id');
+  if (!clientId) { alert('Save Client ID on GitHub App page first'); location.href = 'github-app.html'; return; }
+  $('deviceBox').textContent = 'Requesting device code…';
+  try {
+    const res = await fetch('https://github.com/login/device/code', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ client_id: clientId, scope: 'repo' })
+    });
+    const data = await res.json();
+    if (!data.user_code) throw new Error(data.error_description || data.error || 'Enable Device Flow on the OAuth App');
+    $('deviceBox').innerHTML = 'Open <a href="' + (data.verification_uri || 'https://github.com/login/device') + '" target="_blank" rel="noopener">GitHub device login</a> · code <b>' + data.user_code + '</b>';
+    const interval = (data.interval || 5) * 1000;
+    const expires = Date.now() + (data.expires_in || 900) * 1000;
+    const poll = async () => {
+      if (Date.now() > expires) { $('deviceBox').textContent = 'Expired'; return; }
+      const r = await fetch('https://github.com/login/oauth/access_token', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ client_id: clientId, device_code: data.device_code, grant_type: 'urn:ietf:params:oauth:grant-type:device_code' })
+      });
+      const j = await r.json();
+      if (j.access_token) {
+        const u = await fetch('https://api.github.com/user', { headers: { Authorization: 'Bearer ' + j.access_token, Accept: 'application/vnd.github+json' } }).then(x => x.json());
+        setGh(j.access_token, u.login || 'user');
+        $('deviceBox').textContent = 'Signed in @' + (u.login || 'user');
         return;
       }
-      if(j.error==='authorization_pending'||j.error==='slow_down'){setTimeout(poll,j.error==='slow_down'?interval+3000:interval);return;}
-      $('deviceBox').textContent=j.error_description||j.error||'Auth failed';
+      if (j.error === 'authorization_pending' || j.error === 'slow_down') setTimeout(poll, j.error === 'slow_down' ? interval + 3000 : interval);
+      else $('deviceBox').textContent = j.error_description || j.error || 'Failed';
     };
-    setTimeout(poll,interval);
-  }catch(e){$('deviceBox').textContent=e.message+' — enable Device Flow on the OAuth App or use a PAT.';}
+    setTimeout(poll, interval);
+  } catch (e) { $('deviceBox').textContent = e.message; }
 };
-function b64(str){return btoa(unescape(encodeURIComponent(str)));}
-async function gh(path,opts={}){const token=state.gh?.token;if(!token)throw new Error('Connect GitHub');const res=await fetch('https://api.github.com'+path,{...opts,headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+token,'X-GitHub-Api-Version':'2022-11-28',...(opts.body?{'Content-Type':'application/json'}:{}),...(opts.headers||{})}});const text=await res.text();let data;try{data=JSON.parse(text);}catch{data={raw:text};}if(!res.ok)throw new Error(data.message||data.raw||('GitHub '+res.status));return data;}
-async function ensureRepo(name,isPrivate){try{return await gh('/repos/'+state.gh.login+'/'+name);}catch{return await gh('/user/repos',{method:'POST',body:JSON.stringify({name,private:isPrivate,auto_init:true,description:'VibeDev Fix & Ship'});});}}
-async function putFile(owner,repo,path,content,sha){const body={message:'VibeDev: '+path,content:b64(content),branch:'main'};if(sha)body.sha=sha;return gh('/repos/'+owner+'/'+repo+'/contents/'+path.split('/').map(encodeURIComponent).join('/'),{method:'PUT',body:JSON.stringify(body)});}
-async function pushAll(owner,repo){for(const f of state.files){let sha;try{sha=(await gh('/repos/'+owner+'/'+repo+'/contents/'+f.path.replace(/\\/g,'/'))).sha;}catch{}await putFile(owner,repo,f.path.replace(/\\/g,'/'),f.content,sha);logDeploy('info','Pushed '+f.path);}}
-async function enablePages(owner,repo){try{await gh('/repos/'+owner+'/'+repo+'/pages',{method:'POST',body:JSON.stringify({build_type:'legacy',source:{branch:'main',path:'/'}});});}catch(e){try{await gh('/repos/'+owner+'/'+repo+'/pages',{method:'PUT',body:JSON.stringify({build_type:'legacy',source:{branch:'main',path:'/'}});});}catch(e2){logDeploy('warn','Pages: '+(e2.message||e.message));}}return 'https://'+owner+'.github.io/'+repo+'/';}
-$('btnDeploy').onclick=async()=>{$('deployLog').innerHTML='';if(!state.fixed||!state.gh)return;const name=($('repoName').value.trim()||'vibedev-app').toLowerCase().replace(/[^a-z0-9-_]/g,'-');$('repoName').value=name;$('btnDeploy').disabled=true;try{const repo=await ensureRepo(name,$('repoVis').value==='private');const owner=repo.owner.login;logDeploy('fix','Repo '+repo.html_url);await pushAll(owner,name);if($('target').value==='pages'){const url=await enablePages(owner,name);logDeploy('fix','Pages: <a href="'+url+'" target="_blank">'+url+'</a>');}else{logDeploy('info','Pushed. Create Render service from this repo after linking GitHub in Render.');}}catch(e){logDeploy('err',e.message);}finally{$('btnDeploy').disabled=false;}};
-$('downloadPack').onclick=()=>{const blob=new Blob([JSON.stringify({files:state.files},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='vibedev-fixed.json';a.click();};
-setInterval(()=>{$('btnDeploy').disabled=!(state.fixed&&state.gh);},400);
+
+function b64(str) { return btoa(unescape(encodeURIComponent(str))); }
+
+async function gh(path, opts = {}) {
+  const token = state.gh?.token;
+  if (!token) throw new Error('Connect GitHub');
+  const res = await fetch('https://api.github.com' + path, {
+    ...opts,
+    headers: {
+      Accept: 'application/vnd.github+json',
+      Authorization: 'Bearer ' + token,
+      'X-GitHub-Api-Version': '2022-11-28',
+      ...(opts.body ? { 'Content-Type': 'application/json' } : {}),
+      ...(opts.headers || {})
+    }
+  });
+  const text = await res.text();
+  let data; try { data = JSON.parse(text); } catch { data = { raw: text }; }
+  if (!res.ok) throw new Error(data.message || data.raw || ('GitHub ' + res.status));
+  return data;
+}
+
+async function ensureRepo(name, isPrivate) {
+  try { return await gh('/repos/' + state.gh.login + '/' + name); }
+  catch {
+    return await gh('/user/repos', {
+      method: 'POST',
+      body: JSON.stringify({ name, private: isPrivate, auto_init: true, description: 'Shipped with KCN Vibe Developer — Ship Without Fear' })
+    });
+  }
+}
+
+async function putFile(owner, repo, path, content, sha) {
+  const body = { message: 'KCN Vibe Developer: ' + path, content: b64(content), branch: 'main' };
+  if (sha) body.sha = sha;
+  return gh('/repos/' + owner + '/' + repo + '/contents/' + path.split('/').map(encodeURIComponent).join('/'), {
+    method: 'PUT', body: JSON.stringify(body)
+  });
+}
+
+async function pushAll(owner, repo) {
+  for (const f of state.files) {
+    let sha;
+    try { sha = (await gh('/repos/' + owner + '/' + repo + '/contents/' + f.path.replace(/\\/g, '/'))).sha; } catch {}
+    await putFile(owner, repo, f.path.replace(/\\/g, '/'), f.content, sha);
+    logDeploy('info', 'Pushed ' + f.path);
+  }
+}
+
+async function enablePages(owner, repo) {
+  try {
+    await gh('/repos/' + owner + '/' + repo + '/pages', {
+      method: 'POST',
+      body: JSON.stringify({ build_type: 'legacy', source: { branch: 'main', path: '/' } })
+    });
+  } catch (e) {
+    try {
+      await gh('/repos/' + owner + '/' + repo + '/pages', {
+        method: 'PUT',
+        body: JSON.stringify({ build_type: 'legacy', source: { branch: 'main', path: '/' } })
+      });
+    } catch (e2) {
+      logDeploy('warn', 'Pages API: ' + (e2.message || e.message));
+    }
+  }
+  return 'https://' + owner + '.github.io/' + repo + '/';
+}
+
+function buildShipCard(url, health) {
+  const fixes = state.fixLog.map(x => x.msg).join('; ') || 'none';
+  const blocked = state.blocked.length ? state.blocked.join(', ') : 'none';
+  const status = health?.status || 'pending';
+  const text =
+`KCN Vibe Developer — Ship Card
+Ship Without Fear. We End Broken Deployments.
+
+Live: ${url || '(not set)'}
+Health: ${status}${health?.detail ? ' — ' + health.detail : ''}
+Fixes: ${fixes}
+Secrets blocked: ${blocked}
+Repo: ${$('repoName').value || '—'}
+`;
+  $('shipCard').classList.remove('hidden');
+  $('shipCard').innerHTML = '<h3>Ship card</h3><pre style="white-space:pre-wrap;margin:0;font-size:.8rem">' + text.replace(/</g, '&lt;') + '</pre>';
+  state.shipCardText = text;
+  $('btnCopyCard').disabled = false;
+}
+
+$('btnDeploy').onclick = async () => {
+  $('deployLog').innerHTML = '';
+  if (!state.fixed || !state.gh) return;
+  const name = ($('repoName').value.trim() || 'kcn-vibedev-app').toLowerCase().replace(/[^a-z0-9-_]/g, '-');
+  $('repoName').value = name;
+  $('btnDeploy').disabled = true;
+  try {
+    const repo = await ensureRepo(name, $('repoVis').value === 'private');
+    const owner = repo.owner.login;
+    logDeploy('fix', 'Repo ' + repo.html_url);
+    await pushAll(owner, name);
+    let url = repo.html_url;
+    if ($('target').value === 'pages') {
+      url = await enablePages(owner, name);
+      logDeploy('fix', 'Pages URL (may take 1–2 min): <a href="' + url + '" target="_blank" rel="noopener">' + url + '</a>');
+    } else {
+      logDeploy('info', 'Pushed for Render. Connect repo in Render dashboard for free web service.');
+      url = repo.html_url;
+    }
+    state.lastUrl = url;
+    $('liveUrl').value = url;
+    buildShipCard(url, { status: 'shipped — run health check' });
+    setStep(4);
+  } catch (e) {
+    logDeploy('err', e.message);
+  } finally {
+    $('btnDeploy').disabled = false;
+  }
+};
+
+$('downloadPack').onclick = () => {
+  const blob = new Blob([JSON.stringify({ product: 'KCN Vibe Developer', files: state.files, blocked: state.blocked }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'kcn-vibedev-pack.json';
+  a.click();
+};
+
+$('btnHealth').onclick = async () => {
+  const url = $('liveUrl').value.trim();
+  if (!url) return alert('Enter live URL');
+  const box = $('healthBox');
+  box.classList.remove('hidden', 'ok', 'bad', 'warn');
+  box.innerHTML = 'Checking…';
+  try {
+    const res = await fetch(url, { mode: 'cors' }).catch(() => null);
+    let status = 'unknown';
+    let detail = '';
+    let cls = 'warn';
+    if (!res) {
+      status = 'unreachable from browser';
+      detail = 'CORS or network blocked the check — open the URL yourself. If blank/404, use Heal.';
+      cls = 'warn';
+      $('btnHeal').disabled = false;
+    } else if (!res.ok) {
+      status = 'HTTP ' + res.status;
+      detail = 'Host responded with an error.';
+      cls = 'bad';
+      $('btnHeal').disabled = false;
+    } else {
+      const text = await res.text().catch(() => '');
+      if (!text || text.length < 20) {
+        status = 'empty response';
+        detail = 'Page may be blank.';
+        cls = 'bad';
+        $('btnHeal').disabled = false;
+      } else if (/cannot get|404|not found/i.test(text) && text.length < 500) {
+        status = 'likely 404 body';
+        detail = 'Content looks like an error page.';
+        cls = 'bad';
+        $('btnHeal').disabled = false;
+      } else {
+        status = 'reachable';
+        detail = 'Got HTTP ' + res.status + ' · ' + text.length + ' bytes.';
+        cls = 'ok';
+        $('btnHeal').disabled = true;
+      }
+    }
+    state.lastHealth = { status, detail };
+    box.classList.add(cls);
+    box.innerHTML = '<b>Health: ' + status + '</b><br/>' + detail;
+    buildShipCard(url, state.lastHealth);
+  } catch (e) {
+    box.classList.add('warn');
+    box.innerHTML = '<b>Check limited</b><br/>' + e.message;
+    $('btnHeal').disabled = false;
+  }
+};
+
+$('btnHeal').onclick = async () => {
+  state.healRound += 1;
+  runRepairs();
+  setStep(3);
+  logDeploy('info', 'Heal round ' + state.healRound + ' — re-run Ship to push fixes');
+  alert('Heal applied. Click Ship to GitHub again to redeploy.');
+};
+
+$('btnCopyCard').onclick = async () => {
+  try {
+    await navigator.clipboard.writeText(state.shipCardText || '');
+    alert('Ship card copied');
+  } catch {
+    prompt('Copy Ship card:', state.shipCardText || '');
+  }
+};
+
+setInterval(() => { $('btnDeploy').disabled = !(state.fixed && state.gh); }, 400);
 setStep(1);
 </script>
 </body>

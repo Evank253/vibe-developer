@@ -3,75 +3,45 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>VibeDev — GitHub App setup</title>
+<title>KCN Vibe Developer — GitHub App</title>
 <style>
-:root{--bg:#070a10;--card:#10151f;--border:#243044;--text:#eef3fa;--muted:#92a0b8;--accent:#7c5cff}
+:root{--bg:#06080d;--card:#0e131c;--border:#1e2838;--text:#eef3fb;--muted:#8b98b0;--accent:#7c5cff}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
-.wrap{width:min(720px,92vw);margin:0 auto;padding:32px 0 64px}
-a{color:#9dbbff}h1{margin:0 0 8px}.lead{color:var(--muted)}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin:16px 0}
-code,pre{background:#0b1119;border:1px solid var(--border);border-radius:8px;padding:2px 6px;font-size:.85rem}
-pre{padding:12px;overflow:auto;display:block}
-ol{color:var(--muted)}label{display:block;font-size:.8rem;color:var(--muted);margin-top:10px}
-input{width:100%;padding:10px 12px;border-radius:9px;border:1px solid var(--border);background:#0b1119;color:var(--text);font:inherit;margin-top:4px}
+.wrap{width:min(720px,92vw);margin:0 auto;padding:28px 0 56px}a{color:#9dbbff}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin:14px 0}
+label{display:block;font-size:.8rem;color:var(--muted);margin-top:10px}
+input{width:100%;padding:10px;border-radius:9px;border:1px solid var(--border);background:#0a0e16;color:var(--text);font:inherit;margin-top:4px}
 .btn{display:inline-block;margin-top:12px;padding:10px 16px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#5b9dff);color:#061018;font-weight:700;border:0;cursor:pointer;font:inherit;text-decoration:none}
+ol{color:var(--muted)}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <p><a href="index.html">← VibeDev</a></p>
-  <h1>Make VibeDev a GitHub App</h1>
-  <p class="lead">Register once on GitHub. Users then install / sign in on your website — they should never paste tokens into chat.</p>
-
+  <p><a href="index.html">← KCN Vibe Developer</a></p>
+  <h1>GitHub App setup</h1>
+  <p style="color:var(--muted)">Ship Without Fear starts with a proper GitHub connection — not tokens in chat.</p>
   <div class="card">
-    <h3 style="margin-top:0">Option A — GitHub App (recommended)</h3>
     <ol>
-      <li>Go to <a href="https://github.com/settings/apps/new" target="_blank" rel="noopener">github.com/settings/apps/new</a></li>
-      <li><b>GitHub App name:</b> VibeDev Fix Ship (or unique name)</li>
-      <li><b>Homepage URL:</b> your site (or jsDelivr demo URL for now)</li>
-      <li><b>Callback URL:</b> <code>https://YOUR-DOMAIN/app.html</code></li>
-      <li>Uncheck Webhook if you do not need events yet (or set a URL later)</li>
-      <li><b>Permissions → Repository:</b> Contents (Read &amp; write), Metadata (Read), Pages (Read &amp; write)</li>
-      <li><b>Account permissions:</b> Email (optional)</li>
-      <li>Where can this app be installed? <b>Any account</b> (or Only on this account while testing)</li>
-      <li>Create → copy <b>Client ID</b> (and generate a client secret if using server OAuth)</li>
+      <li>Create a GitHub App or OAuth App</li>
+      <li>Permissions: Contents R/W, Metadata R, Pages R/W</li>
+      <li>Enable Device Flow if using browser sign-in</li>
+      <li>Paste Client ID below (this browser only)</li>
     </ol>
-  </div>
-
-  <div class="card">
-    <h3 style="margin-top:0">Option B — OAuth App (simpler)</h3>
-    <ol>
-      <li><a href="https://github.com/settings/developers" target="_blank" rel="noopener">Developer settings → OAuth Apps → New</a></li>
-      <li>Authorization callback URL: your hosted <code>app.html</code> origin</li>
-      <li>Copy Client ID into the field below (saved in this browser only)</li>
-    </ol>
-  </div>
-
-  <div class="card">
-    <h3 style="margin-top:0">Save Client ID for this browser</h3>
-    <label>GitHub OAuth / App Client ID</label>
-    <input id="clientId" placeholder="Iv1.xxxxx or similar"/>
-    <button class="btn" type="button" id="save">Save Client ID</button>
-    <p id="msg" style="color:#3dd68c;font-size:.9rem"></p>
-    <p style="color:var(--muted);font-size:.85rem">Then open the app and use <b>Sign in with GitHub</b> (Device flow). Client secret stays on a server if you host the full OAuth code exchange.</p>
-    <a class="btn" href="app.html">Open Fix &amp; Ship app</a>
-  </div>
-
-  <div class="card">
-    <h3 style="margin-top:0">Host the website</h3>
-    <p style="color:var(--muted);margin:0">Serve the <code>public/</code> folder on any static host, or:</p>
-    <pre>npx --yes serve public -p 4000</pre>
-    <p style="color:var(--muted)">Demo CDN: <a href="https://cdn.jsdelivr.net/gh/Evank253/vibe-developer@Python-3/public/index.html">jsDelivr index</a></p>
+    <label>Client ID</label>
+    <input id="clientId" placeholder="Iv1.…"/>
+    <button class="btn" type="button" id="save">Save</button>
+    <p id="msg" style="color:#3dd68c"></p>
+    <a class="btn" href="app.html">Open app</a>
   </div>
 </div>
 <script>
-const saved = localStorage.getItem('vibedev_github_client_id');
-if (saved) document.getElementById('clientId').value = saved;
+const s = localStorage.getItem('vibedev_github_client_id');
+if (s) document.getElementById('clientId').value = s;
 document.getElementById('save').onclick = () => {
   const v = document.getElementById('clientId').value.trim();
   if (!v) return;
   localStorage.setItem('vibedev_github_client_id', v);
-  document.getElementById('msg').textContent = 'Saved. Open the app to sign in with GitHub.';
+  document.getElementById('msg').textContent = 'Saved';
 };
 </script>
 </body>

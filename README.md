@@ -1,24 +1,31 @@
-# VibeDev — Fix & Ship
+# KCN Vibe Developer
 
-Takes an **existing project**, repairs it, and **deploys** it.
+**Ship Without Fear.**  
+**We End Broken Deployments.**
 
-Not a from-scratch idea builder.
+Import an existing project → fix it → ship → verify the live URL → heal if broken.
 
-## Flow
+Not an idea-to-app builder.
 
-1. **Import** zip or files  
-2. **Fix** junk, gaps, basics  
-3. **Ship**
-   - **GitHub Pages** — user pastes GitHub token → VibeDev creates repo, pushes, enables Pages  
-   - **Render** — user links GitHub inside Render once + pastes Render API key → VibeDev creates free web service  
+## Live
 
-## Live app
+- Site: https://cdn.jsdelivr.net/gh/Evank253/vibe-developer@Python-3/public/index.html  
+- App: https://cdn.jsdelivr.net/gh/Evank253/vibe-developer@Python-3/public/app.html  
 
-https://cdn.jsdelivr.net/gh/Evank253/vibe-developer@Python-3/public/app.html
+## Loop
 
-## Why sign-in is required
+1. Import  
+2. Fix (secrets shield, stack prep)  
+3. Ship (Pages / Render-ready)  
+4. Verify health  
+5. One-click heal & re-ship  
+6. Ship card  
 
-GitHub and Render will not let any tool deploy into your account without your authorization. VibeDev automates everything *after* that one-time link.
+## Local
+
+```bash
+npx --yes serve public -p 4000
+```
 
 ## Legal
 

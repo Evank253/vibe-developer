@@ -3,85 +3,83 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>VibeDev — GitHub Fix & Ship App</title>
-<meta name="description" content="VibeDev is a website and GitHub-connected app that imports projects, fixes them, and deploys to GitHub Pages or Render."/>
+<title>KCN Vibe Developer — Ship Without Fear</title>
+<meta name="description" content="KCN Vibe Developer. Ship Without Fear. We End Broken Deployments. Import, fix, deploy, verify, heal."/>
 <style>
 :root{
-  --bg:#070a10;--card:#10151f;--border:#243044;--text:#eef3fa;--muted:#92a0b8;
-  --accent:#7c5cff;--ok:#3dd68c;
+  --bg:#06080d;--card:#0e131c;--border:#1e2838;--text:#eef3fb;--muted:#8b98b0;
+  --accent:#7c5cff;--ok:#3dd68c;--warn:#ffb454;--err:#ff6b6b;
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:Inter,system-ui,sans-serif;background:
-  radial-gradient(1000px 480px at 15% -15%,#2a1a55,transparent 50%),
-  radial-gradient(800px 400px at 90% 10%,#0d2a3a,transparent 45%),var(--bg);
+  radial-gradient(1000px 500px at 10% -20%,#2a1850,transparent 50%),
+  radial-gradient(800px 400px at 100% 0%,#0a2a35,transparent 45%),var(--bg);
   color:var(--text);line-height:1.55}
-.nav{display:flex;align-items:center;gap:16px;padding:16px 4vw;border-bottom:1px solid var(--border);backdrop-filter:blur(8px)}
-.logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#00d4aa);display:grid;place-items:center;font-weight:800}
-.nav a{color:var(--muted);text-decoration:none;font-size:.92rem}.nav a:hover{color:var(--text)}
-.nav .spacer{flex:1}
-.btn{display:inline-block;padding:11px 18px;border-radius:11px;font-weight:700;text-decoration:none;border:0;cursor:pointer;font:inherit}
-.btn-primary{background:linear-gradient(135deg,var(--accent),#5b9dff);color:#061018}
-.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
-.hero{width:min(980px,92vw);margin:0 auto;padding:64px 0 40px}
-.hero h1{font-size:clamp(2rem,4.5vw,3rem);margin:0 0 12px;letter-spacing:-.02em}
-.hero p{color:var(--muted);font-size:1.1rem;max-width:620px}
-.pills{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
-.pill{padding:6px 12px;border-radius:999px;border:1px solid var(--border);font-size:.8rem;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:28px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
-.card h3{margin:0 0 8px;font-size:1.05rem}.card p{margin:0;color:var(--muted);font-size:.92rem}
-.section{width:min(980px,92vw);margin:0 auto;padding:24px 0 64px}
-.section h2{margin:0 0 12px}
-ol{color:var(--muted)}ol li{margin-bottom:8px}
-footer{border-top:1px solid var(--border);padding:20px 4vw;color:var(--muted);font-size:.85rem}
+.nav{display:flex;align-items:center;gap:14px;padding:14px 4vw;border-bottom:1px solid var(--border)}
+.logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#00d4aa);display:grid;place-items:center;font-weight:900;font-size:.95rem}
+.brand{font-weight:800;letter-spacing:-.02em}.brand span{color:var(--muted);font-weight:600;font-size:.85rem;display:block}
+.nav a{color:var(--muted);text-decoration:none;font-size:.9rem}.nav .sp{flex:1}
+.btn{display:inline-block;padding:12px 20px;border-radius:12px;font-weight:700;text-decoration:none;border:0;cursor:pointer;font:inherit}
+.btn-p{background:linear-gradient(135deg,var(--accent),#5b9dff);color:#061018}
+.btn-g{background:transparent;border:1px solid var(--border);color:var(--text)}
+.hero{width:min(960px,92vw);margin:0 auto;padding:56px 0 32px;text-align:center}
+.tag{display:inline-block;padding:6px 14px;border-radius:999px;border:1px solid rgba(61,214,140,.35);color:var(--ok);font-size:.8rem;font-weight:600;margin-bottom:16px}
+.hero h1{font-size:clamp(2.2rem,5vw,3.4rem);margin:0 0 8px;letter-spacing:-.03em;line-height:1.1}
+.slogan{font-size:clamp(1.1rem,2.5vw,1.45rem);color:#c5d0e6;margin:0 0 8px;font-weight:600}
+.sub{color:var(--muted);max-width:560px;margin:0 auto 24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;width:min(960px,92vw);margin:28px auto;text-align:left}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
+.card h3{margin:0 0 6px;font-size:1rem}.card p{margin:0;color:var(--muted);font-size:.88rem}
+.section{width:min(960px,92vw);margin:0 auto;padding:24px 0 64px}
+.section h2{text-align:center;margin:0 0 8px}.section .lead{text-align:center;color:var(--muted);margin:0 0 20px}
+footer{border-top:1px solid var(--border);padding:20px 4vw;color:var(--muted);font-size:.85rem;text-align:center}
 </style>
 </head>
 <body>
 <header class="nav">
-  <div class="logo">V</div>
-  <strong>VibeDev</strong>
-  <div class="spacer"></div>
-  <a href="#how">How it works</a>
+  <div class="logo">KCN</div>
+  <div class="brand">Vibe Developer<span>Ship Without Fear</span></div>
+  <div class="sp"></div>
+  <a href="#loop">The loop</a>
   <a href="github-app.html">GitHub App</a>
-  <a href="app.html" class="btn btn-primary">Open app</a>
+  <a class="btn btn-p" href="app.html">Open app</a>
 </header>
 
 <section class="hero">
-  <div class="pills">
-    <span class="pill">Website</span>
-    <span class="pill">GitHub-connected</span>
-    <span class="pill">Fix &amp; Ship</span>
-  </div>
-  <h1>Your project in.<br/>Fixed &amp; shipped out.</h1>
-  <p>VibeDev is a <b>website app</b> that connects to GitHub. Import an existing project, repair it, push it, and deploy — without fighting setup.</p>
-  <p style="margin-top:20px">
-    <a class="btn btn-primary" href="app.html">Launch Fix &amp; Ship</a>
-    <a class="btn btn-ghost" href="github-app.html">Set up as GitHub App</a>
-  </p>
+  <div class="tag">WE END BROKEN DEPLOYMENTS</div>
+  <h1>KCN Vibe Developer</h1>
+  <p class="slogan">Ship Without Fear.</p>
+  <p class="sub">Import a real project. We fix it, put it online, check that it actually works, and heal it when it doesn’t.</p>
+  <a class="btn btn-p" href="app.html">Start shipping</a>
+  <a class="btn btn-g" href="#loop">See how</a>
+</section>
 
+<div class="grid">
+  <div class="card"><h3>Import</h3><p>Your existing project — zip or files. Not an idea generator.</p></div>
+  <div class="card"><h3>Fix</h3><p>Clean junk, fill gaps, block secrets, stack-aware prep.</p></div>
+  <div class="card"><h3>Ship</h3><p>GitHub Pages or Render with clear defaults.</p></div>
+  <div class="card"><h3>Verify &amp; heal</h3><p>Live health check. One-click repair + redeploy.</p></div>
+</div>
+
+<section class="section" id="loop">
+  <h2>The Ship Without Fear loop</h2>
+  <p class="lead">Most tools stop at “pushed.” We stop when it’s actually alive.</p>
   <div class="grid">
-    <div class="card"><h3>1. Import</h3><p>Drop a zip or project files. Not an idea generator — it works on what you already have.</p></div>
-    <div class="card"><h3>2. Fix</h3><p>Clean junk, fill missing basics, prepare the tree so hosts accept it.</p></div>
-    <div class="card"><h3>3. Ship</h3><p>Connect GitHub → push → enable Pages or hand off to Render.</p></div>
+    <div class="card"><h3>1. Secrets shield</h3><p>Blocks .env and obvious keys before they hit a public repo.</p></div>
+    <div class="card"><h3>2. Stack defaults</h3><p>HTML → Pages. Node/Python → Render-ready tree.</p></div>
+    <div class="card"><h3>3. Live health</h3><p>Fetch the URL. Catch blank pages, hard failures, obvious 404 patterns.</p></div>
+    <div class="card"><h3>4. One-click heal</h3><p>Apply the next fix and ship again without starting over.</p></div>
+    <div class="card"><h3>5. Ship card</h3><p>Shareable summary: live link, what changed, health status.</p></div>
+    <div class="card"><h3>6. Re-ship</h3><p>Drop an update of the same project. We fix the delta and redeploy.</p></div>
   </div>
+  <p style="text-align:center;margin-top:28px">
+    <a class="btn btn-p" href="app.html">Open KCN Vibe Developer</a>
+  </p>
 </section>
 
-<section class="section" id="how">
-  <h2>GitHub App (owner setup)</h2>
-  <p style="color:var(--muted)">To make this a real installable GitHub App for your users, register it once on GitHub. Full steps:</p>
-  <ol>
-    <li>Open <a href="github-app.html" style="color:#9dbbff">GitHub App setup</a></li>
-    <li>Create the App (or OAuth App) with the listed permissions</li>
-    <li>Put Client ID on your hosted VibeDev site</li>
-    <li>Users click <b>Sign in with GitHub</b> — no pasting tokens into chat</li>
-  </ol>
-  <div class="card" style="margin-top:16px">
-    <h3>Live demo (static)</h3>
-    <p>This site can be opened via jsDelivr or any static host while you finish OAuth credentials.</p>
-    <p style="margin-top:10px"><a class="btn btn-primary" href="app.html">Open app now</a></p>
-  </div>
-</section>
-
-<footer>VibeDev · Tools only · You are responsible for what you ship · <a href="https://github.com/Evank253/vibe-developer" style="color:#9dbbff">Source</a></footer>
+<footer>
+  <strong>KCN Vibe Developer</strong> · Ship Without Fear. · We End Broken Deployments.<br/>
+  Tools only. You are responsible for what you ship.
+</footer>
 </body>
 </html>

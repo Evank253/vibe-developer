@@ -3,33 +3,85 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>VibeDev — Fix & Ship</title>
+<title>VibeDev — GitHub Fix & Ship App</title>
+<meta name="description" content="VibeDev is a website and GitHub-connected app that imports projects, fixes them, and deploys to GitHub Pages or Render."/>
 <style>
-:root{--bg:#0b0e14;--card:#11151f;--border:#232a3a;--text:#e6e9f0;--muted:#8b93a7}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:radial-gradient(900px 400px at 15% -10%,#2a1a4a,transparent 50%),var(--bg);color:var(--text);line-height:1.55}
-.wrap{width:min(720px,92vw);margin:0 auto;padding:48px 0}
-h1{margin:0 0 8px} .lead{color:var(--muted)}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin:16px 0}
-a.btn{display:inline-block;padding:12px 20px;border-radius:12px;background:linear-gradient(135deg,#7c5cff,#5b9dff);color:#061018;font-weight:700;text-decoration:none}
-.muted{color:var(--muted);font-size:.9rem}
-ul{color:var(--muted)}
+:root{
+  --bg:#070a10;--card:#10151f;--border:#243044;--text:#eef3fa;--muted:#92a0b8;
+  --accent:#7c5cff;--ok:#3dd68c;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:
+  radial-gradient(1000px 480px at 15% -15%,#2a1a55,transparent 50%),
+  radial-gradient(800px 400px at 90% 10%,#0d2a3a,transparent 45%),var(--bg);
+  color:var(--text);line-height:1.55}
+.nav{display:flex;align-items:center;gap:16px;padding:16px 4vw;border-bottom:1px solid var(--border);backdrop-filter:blur(8px)}
+.logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#00d4aa);display:grid;place-items:center;font-weight:800}
+.nav a{color:var(--muted);text-decoration:none;font-size:.92rem}.nav a:hover{color:var(--text)}
+.nav .spacer{flex:1}
+.btn{display:inline-block;padding:11px 18px;border-radius:11px;font-weight:700;text-decoration:none;border:0;cursor:pointer;font:inherit}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#5b9dff);color:#061018}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+.hero{width:min(980px,92vw);margin:0 auto;padding:64px 0 40px}
+.hero h1{font-size:clamp(2rem,4.5vw,3rem);margin:0 0 12px;letter-spacing:-.02em}
+.hero p{color:var(--muted);font-size:1.1rem;max-width:620px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+.pill{padding:6px 12px;border-radius:999px;border:1px solid var(--border);font-size:.8rem;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:28px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
+.card h3{margin:0 0 8px;font-size:1.05rem}.card p{margin:0;color:var(--muted);font-size:.92rem}
+.section{width:min(980px,92vw);margin:0 auto;padding:24px 0 64px}
+.section h2{margin:0 0 12px}
+ol{color:var(--muted)}ol li{margin-bottom:8px}
+footer{border-top:1px solid var(--border);padding:20px 4vw;color:var(--muted);font-size:.85rem}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>VibeDev — Fix & Ship</h1>
-  <p class="lead">Import an existing project → repair it → deploy with GitHub Pages or Render after a one-time sign-in.</p>
-  <div class="card">
-    <a class="btn" href="app.html">Open Fix & Ship</a>
+<header class="nav">
+  <div class="logo">V</div>
+  <strong>VibeDev</strong>
+  <div class="spacer"></div>
+  <a href="#how">How it works</a>
+  <a href="github-app.html">GitHub App</a>
+  <a href="app.html" class="btn btn-primary">Open app</a>
+</header>
+
+<section class="hero">
+  <div class="pills">
+    <span class="pill">Website</span>
+    <span class="pill">GitHub-connected</span>
+    <span class="pill">Fix &amp; Ship</span>
   </div>
-  <div class="card">
-    <p style="margin-top:0"><b>Auto-deploy</b></p>
-    <ul>
-      <li><b>GitHub Pages</b> — connect with a GitHub token; VibeDev pushes and enables Pages</li>
-      <li><b>Render</b> — link GitHub in Render once, paste Render API key; VibeDev creates the service</li>
-    </ul>
-    <p class="muted">No app can deploy to your accounts without that link — by design.</p>
+  <h1>Your project in.<br/>Fixed &amp; shipped out.</h1>
+  <p>VibeDev is a <b>website app</b> that connects to GitHub. Import an existing project, repair it, push it, and deploy — without fighting setup.</p>
+  <p style="margin-top:20px">
+    <a class="btn btn-primary" href="app.html">Launch Fix &amp; Ship</a>
+    <a class="btn btn-ghost" href="github-app.html">Set up as GitHub App</a>
+  </p>
+
+  <div class="grid">
+    <div class="card"><h3>1. Import</h3><p>Drop a zip or project files. Not an idea generator — it works on what you already have.</p></div>
+    <div class="card"><h3>2. Fix</h3><p>Clean junk, fill missing basics, prepare the tree so hosts accept it.</p></div>
+    <div class="card"><h3>3. Ship</h3><p>Connect GitHub → push → enable Pages or hand off to Render.</p></div>
   </div>
-</div>
+</section>
+
+<section class="section" id="how">
+  <h2>GitHub App (owner setup)</h2>
+  <p style="color:var(--muted)">To make this a real installable GitHub App for your users, register it once on GitHub. Full steps:</p>
+  <ol>
+    <li>Open <a href="github-app.html" style="color:#9dbbff">GitHub App setup</a></li>
+    <li>Create the App (or OAuth App) with the listed permissions</li>
+    <li>Put Client ID on your hosted VibeDev site</li>
+    <li>Users click <b>Sign in with GitHub</b> — no pasting tokens into chat</li>
+  </ol>
+  <div class="card" style="margin-top:16px">
+    <h3>Live demo (static)</h3>
+    <p>This site can be opened via jsDelivr or any static host while you finish OAuth credentials.</p>
+    <p style="margin-top:10px"><a class="btn btn-primary" href="app.html">Open app now</a></p>
+  </div>
+</section>
+
+<footer>VibeDev · Tools only · You are responsible for what you ship · <a href="https://github.com/Evank253/vibe-developer" style="color:#9dbbff">Source</a></footer>
 </body>
 </html>

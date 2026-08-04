@@ -1,38 +1,18 @@
-import config from '../../config.js';
-import createAnthropic from './anthropic.js';
-import createOpenAI from './openai.js';
-import mockProvider from './mock.js';
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY package.json package-lock.json* ./
+COPY client/package.json client/package-lock.json* ./client/
+RUN npm install && npm --prefix client install
+COPY . .
+RUN npm run build:client
 
-// Factory: builds a provider instance by name.
-// Supports: mock, anthropic, openai, auto (picks first available real key, else mock).
-
-export function getProvider(name) {
-  const ai = config.ai;
-  let target = name || ai.activeProvider || 'mock';
-
-  if (target === 'auto') {
-    if (ai.anthropic.apiKey) target = 'anthropic';
-    else if (ai.openai.apiKey) target = 'openai';
-    else target = 'mock';
-  }
-
-  if (target === 'anthropic') return createAnthropic(ai.anthropic);
-  if (target === 'openai') return createOpenAI(ai.openai);
-  return mockProvider;
-}
-
-export function availableProviders() {
-  const list = [{ id: 'mock', label: 'Demo mode (no key needed)', configured: true }];
-  if (config.ai.anthropic.apiKey) list.push({ id: 'anthropic', label: 'Anthropic (Claude)', configured: true });
-  else list.push({ id: 'anthropic', label: 'Anthropic (Claude)', configured: false });
-  if (config.ai.openai.apiKey) list.push({ id: 'openai', label: 'OpenAI (GPT)', configured: true });
-  else list.push({ id: 'openai', label: 'OpenAI (GPT)', configured: false });
-  list.push({ id: 'auto', label: 'Auto (best available)', configured: true });
-  return list;
-}
-
-export default {
-  getProvider,
-  availableProviders,
-  defaultName: config.ai.activeProvider
-};
+FROM node:20-alpine
+WORKDIR /app
+ENV NODE_ENV=production
+COPY package.json package-lock.json* ./
+RUN npm install --omit=dev
+COPY server ./server
+COPY --from=build /app/client/dist ./client/dist
+COPY .env.example ./
+EXPOSE 4000
+CMD ["node", "server/index.js"]

@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main, Python-3]
+  pull_request:
+    branches: [main, Python-3]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install backend deps
+        run: npm install
+
+      - name: Install client deps
+        run: npm --prefix client install
+
+      - name: Lint server
+        run: npx eslint server --ext .js || true
+
+      - name: Build client
+        run: npm run build:client
+
+      - name: Smoke-test mock AI + server import
+        run: |
+          node -e "
+            import('./server/services/ai/index.js').then(async m => {
+              const p = m.getProvider('mock');
+              const r = await p.generateCode('hello', 'Python');
+              if (!r.code) throw new Error('mock gen failed');
+              console.log('mock AI OK:', r.fileName);
+            });
+          "
+          node -e "import('./server/config.js').then(c => { const v = c.validateEnv(); if (v.errors.length) { console.error(v.errors); process.exit(1); } console.log('config OK'); })"
+          echo "✅ Backend imports and mock AI provider work."
+
+      - name: Dependency audit (non-blocking)
+        run: npm audit --omit=dev --audit-level=high || true

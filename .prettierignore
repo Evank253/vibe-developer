@@ -1,0 +1,7 @@
+node_modules
+client/dist
+workspace
+uploads
+package-lock.json
+client/package-lock.json
+*.zip

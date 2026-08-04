@@ -1,47 +1,74 @@
-# KCN Vibe Developer
+# VibeDev
 
-**Ship Without Fear.**  
-**We End Broken Deployments.**
+**Ship Without Fear.** AI-assisted fix, organize, and deploy for real projects.
 
-## Live (no install)
+## Architecture
 
-| Page | URL |
-|------|-----|
-| **Fleet Hub** | https://cdn.jsdelivr.net/gh/Evank253/vibe-developer@Python-3/public/index.html |
-| **Fix & Ship app** | https://cdn.jsdelivr.net/gh/Evank253/vibe-developer@Python-3/public/app.html |
-| **Create API** | https://cdn.jsdelivr.net/gh/Evank253/vibe-developer@Python-3/public/create-api.html |
-| **GitHub App setup** | https://cdn.jsdelivr.net/gh/Evank253/vibe-developer@Python-3/public/github-app.html |
+```
+/server          Express API (Node ≥18)
+/client          React + Vite frontend
+/scripts         Deploy helpers
+```
 
-## What it does
-
-1. **Import** — zip / files  
-2. **Fix** — clean, secrets shield, stack defaults  
-3. **Ship** — GitHub Pages or Render-ready push  
-4. **Verify** — live health check  
-5. **Heal** — one-click repair + re-ship  
-6. **Ship card** — shareable summary  
-
-Not an idea-to-app builder.
-
-## Pre-deploy checks run
-
-- Inline JS syntax (`node --check`) — pass  
-- Required control IDs present — pass  
-- Secrets-shield unit (blocks `.env`) — pass  
-
-## Local
+## Quick start
 
 ```bash
 git clone -b Python-3 https://github.com/Evank253/vibe-developer.git
 cd vibe-developer
-npx --yes serve public -p 4000
+cp .env.example .env   # optional: add AI / GitHub keys
+npm run setup
+npm run build:client
+npm start
 ```
 
-Open http://localhost:4000/app.html
+Or one shot:
 
-## GitHub Marketplace
+```bash
+bash start.sh
+```
 
-Marketplace listing requires a published **GitHub App** under your account (permissions review by GitHub). Use `public/github-app.html` to register Client ID first. We cannot submit Marketplace for you without your GitHub App ownership.
+Open http://localhost:4000
+
+## Environment
+
+See `.env.example`. Required for production:
+
+| Variable | Purpose |
+|----------|---------|
+| `AI_PROVIDER` | `mock` \| `anthropic` \| `openai` \| `auto` |
+| `ANTHROPIC_API_KEY` / `OPENAI_API_KEY` | Provider keys |
+| `GITHUB_CLIENT_ID` / `SECRET` | OAuth (optional; PAT also works) |
+| `CORS_ORIGIN` | Allowed origin(s) in production |
+| `RATE_LIMIT_*` | API rate limits |
+
+Startup **validates** env and exits with a clear error if required keys are missing for the chosen provider.
+
+## Security baseline
+
+- `helmet` headers
+- Rate limiting on `/api`
+- CORS restricted in production when `CORS_ORIGIN` is set
+- Upload filter: `.zip` only + size limits
+- Request IDs (`X-Request-Id`) for tracing
+- Structured JSON request/error logs
+- Secrets only via environment variables
+- Dependabot + CI audit step
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm start` | Run API (+ static client if built) |
+| `npm run dev` | API with `--watch` |
+| `npm run dev:client` | Vite dev server (proxies `/api`) |
+| `npm run build:client` | Production client build |
+| `npm run lint` | ESLint server |
+| `npm test` | Smoke tests (mock AI) |
+| `npm run audit` | Dependency vulnerability scan |
+
+## Deploy
+
+See `DEPLOY.md` and `render.yaml` / `scripts/deploy-heroku.sh`.
 
 ## Legal
 

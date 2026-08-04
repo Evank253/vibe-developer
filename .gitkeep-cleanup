@@ -1,0 +1,2 @@
+# This commit removes legacy flat structure files.
+# Only server/ and client/ directories are kept for the organized modular structure.

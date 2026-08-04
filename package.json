@@ -1,0 +1,21 @@
+{
+  "name": "vibe-developer",
+  "version": "1.0.0",
+  "description": "Vibe Developer - Ship Without Fear",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "vibe",
+    "developer",
+    "api",
+    "generator"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {}
+}

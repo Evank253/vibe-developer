@@ -1,22 +1,30 @@
 import { Router } from 'express';
-import github from './github.js';
-import project from './project.js';
-import ai from './ai.js';
-import deploy from './deploy.js';
+import config from '../config.js';
+import aiService, { availableProviders } from '../services/ai/index.js';
+
+import githubRouter from './github.js';
+import projectRouter from './project.js';
+import aiRouter from './ai.js';
+import deployRouter from './deploy.js';
 
 const router = Router();
 
+router.use('/github', githubRouter);
+router.use('/project', projectRouter);
+router.use('/ai', aiRouter);
+router.use('/deploy', deployRouter);
+
+// App metadata + provider settings
 router.get('/info', (req, res) => {
   res.json({
-    name: 'VibeDev',
+    app: 'VibeDev',
     version: '1.0.0',
-    description: 'AI super-developer API'
+    providers: availableProviders(),
+    activeProvider: aiService.defaultName,
+    githubOAuthConfigured: Boolean(config.githubClientId && config.githubClientSecret)
   });
 });
 
-router.use('/github', github);
-router.use('/project', project);
-router.use('/ai', ai);
-router.use('/deploy', deploy);
+router.get('/health', (req, res) => res.json({ ok: true }));
 
 export default router;

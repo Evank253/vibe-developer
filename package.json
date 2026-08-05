@@ -1,35 +1,55 @@
 {
-  "name": "vibe-developer",
+  "name": "vibedev",
   "version": "1.0.0",
-  "description": "Vibe Developer - Ship Without Fear",
+  "description": "VibeDev — AI super-developer: connect GitHub, drop in any zip/project, and it reviews, fixes, generates missing code, organizes your files, and deploys — all through a chat copilot.",
   "type": "module",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "dev:client": "npm --prefix client run dev",
+    "setup": "npm install && npm --prefix client install",
+    "build:client": "npm --prefix client run build",
+    "go": "bash start.sh",
+    "lint": "eslint server client/src --ext .js,.jsx",
+    "lint:fix": "eslint server client/src --ext .js,.jsx --fix",
+    "format": "prettier --write \"server/**/*.{js,json}\" \"client/src/**/*.{js,jsx,css}\" \"*.{js,json,md}\"",
+    "format:check": "prettier --check \"server/**/*.{js,json}\" \"client/src/**/*.{js,jsx,css}\"",
+    "test": "node --test server/tests/*.test.js 2>/dev/null || node -e \"import('./server/services/ai/index.js').then(async m=>{const p=m.getProvider('mock');const r=await p.generateCode('hello','Python');if(!r.code)throw new Error('mock gen failed');console.log('OK',r.fileName);})\"",
+    "audit": "npm audit --omit=dev",
+    "deploy:heroku": "bash scripts/deploy-heroku.sh"
   },
-  "keywords": [
-    "vibe",
-    "developer",
-    "api",
-    "generator",
-    "deploy"
-  ],
-  "author": "",
-  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^19.2.8",
     "express": "^4.19.2",
+    "adm-zip": "^0.5.16",
     "cors": "^2.8.5",
-    "helmet": "^7.1.0",
-    "multer": "^2.2.0",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^7.2.0",
+    "multer": "^2.0.0",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "vite": "^8.2.0",
-    "@vitejs/plugin-react": "^4.3.1"
-  }
+    "eslint": "^9.22.0",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "prettier": "^3.5.3"
+  },
+  "keywords": [
+    "vibe-code",
+    "ai",
+    "github",
+    "copilot",
+    "developer",
+    "code-review",
+    "organizer",
+    "deploy"
+  ],
+  "license": "MIT"
 }

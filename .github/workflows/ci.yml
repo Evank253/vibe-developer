@@ -24,7 +24,7 @@ jobs:
         run: npm --prefix client install
 
       - name: Lint server
-        run: npx eslint server --ext .js || true
+        run: npx eslint server/
 
       - name: Build client
         run: npm run build:client
@@ -41,6 +41,19 @@ jobs:
           "
           node -e "import('./server/config.js').then(c => { const v = c.validateEnv(); if (v.errors.length) { console.error(v.errors); process.exit(1); } console.log('config OK'); })"
           echo "✅ Backend imports and mock AI provider work."
+
+      - name: Smoke-test health endpoint
+        run: |
+          node server/index.js &
+          SERVER_PID=$!
+          sleep 3
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:4000/api/health)
+          kill $SERVER_PID 2>/dev/null || true
+          if [ "$STATUS" != "200" ]; then
+            echo "❌ Health endpoint returned HTTP $STATUS"
+            exit 1
+          fi
+          echo "✅ Health endpoint returned HTTP 200"
 
       - name: Dependency audit (non-blocking)
         run: npm audit --omit=dev --audit-level=high || true

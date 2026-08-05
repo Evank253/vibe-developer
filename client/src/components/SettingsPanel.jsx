@@ -34,7 +34,7 @@ export default function SettingsPanel({ provider, setProvider, info, github, onV
           </select>
         </label>
         <p className="small muted" style={{ marginBottom: 0 }}>
-          <b>Demo mode</b> works instantly with no key. For real AI, set keys in the server's <b className="mono">.env</b>: <b className="mono">ANTHROPIC_API_KEY</b>, <b className="mono">OPENAI_API_KEY</b>, and <b className="mono">AI_PROVIDER</b> (anthropic | openai | auto).
+          <b>Demo mode</b> works instantly with no key. For real AI, set keys in the server&apos;s <b className="mono">.env</b>: <b className="mono">ANTHROPIC_API_KEY</b>, <b className="mono">OPENAI_API_KEY</b>, and <b className="mono">AI_PROVIDER</b> (anthropic | openai | auto).
         </p>
       </div>
 

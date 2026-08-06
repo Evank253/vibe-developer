@@ -24,7 +24,7 @@ jobs:
         run: npm --prefix client install
 
       - name: Lint server
-        run: npx eslint server --ext .js || true
+        run: npx eslint server/ || true
 
       - name: Build client
         run: npm run build:client

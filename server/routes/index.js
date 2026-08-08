@@ -6,6 +6,7 @@ import githubRouter from './github.js';
 import projectRouter from './project.js';
 import aiRouter from './ai.js';
 import deployRouter from './deploy.js';
+import vibeBridgeRouter from './vibeBridge.js';
 
 const router = Router();
 
@@ -13,6 +14,7 @@ router.use('/github', githubRouter);
 router.use('/project', projectRouter);
 router.use('/ai', aiRouter);
 router.use('/deploy', deployRouter);
+router.use('/vibe', vibeBridgeRouter);
 
 // App metadata + provider settings
 router.get('/info', (req, res) => {
@@ -21,7 +23,8 @@ router.get('/info', (req, res) => {
     version: '1.0.0',
     providers: availableProviders(),
     activeProvider: aiService.defaultName,
-    githubOAuthConfigured: Boolean(config.githubClientId && config.githubClientSecret)
+    githubOAuthConfigured: Boolean(config.githubClientId && config.githubClientSecret),
+    vibeBridge: true,
   });
 });
 

@@ -1,0 +1,19 @@
+name: Package smoke (docs gate)
+
+on:
+  push:
+    branches: [Python-3, main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  package-files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Required package deal files
+        run: |
+          test -f STORE_PACKAGE_DEAL.md
+          test -f KCN_BACKEND_RELIABLE.md
+          test -f README.md
+          echo "Package deal docs present"

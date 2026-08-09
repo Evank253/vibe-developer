@@ -8,6 +8,7 @@ import { randomUUID } from 'crypto';
 import { fileURLToPath } from 'url';
 import config, { validateEnv } from './config.js';
 import apiRouter from './routes/index.js';
+import { developerPublish } from './services/vibeContract.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -135,4 +136,14 @@ app.listen(config.port, () => {
   console.log(`  AI provider: ${config.ai.activeProvider}`);
   console.log(`  Workspace:   ${config.workspaceRoot}`);
   console.log(`  Env:         ${config.env}\n`);
+
+  // "Developer runs first": publish the dependency contract as soon as this
+  // server is up, so any Coder (e.g. Kronos-Vibe-Coder) polling
+  // /api/vibe/coder/brief can proceed without a manual API call. Opt out
+  // with VIBE_AUTO_PUBLISH=false if you want to publish pins manually via
+  // POST /api/vibe/developer instead (e.g. with custom pins).
+  if (process.env.VIBE_AUTO_PUBLISH !== 'false') {
+    const contract = developerPublish({ notes: 'auto-published on Vibe Developer startup' });
+    console.log(`  📦 Dependency contract published: ${JSON.stringify(contract.pins)}\n`);
+  }
 });
